@@ -57,7 +57,7 @@ public class HistoryPanel {
 
     public void clear() {
         this.histView.getItems().remove(0,histView.getItems().size());
-        this.histView.getItems().add("No records");
+        //this.histView.getItems().add("No records");
     }
 
 }

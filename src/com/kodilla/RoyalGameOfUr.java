@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -117,11 +118,22 @@ public class RoyalGameOfUr extends Application {
         gameBoardPanel.getNewMoveButton().setOnAction( event -> {
 
             boolean addingNewPiece=false;
-            boolean moveExisting = true;
+            boolean moveExisting = false;
             playerMove = true;
+            Alert alert = null;
 
             if(humanPlayer.getPiecesReadyToEnterIntoBoard()>0 && humanPlayer.getPiecesReadyToEnterIntoBoard()<7) {
-                System.out.println("tu");
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Add new piece Question");
+                alert.setHeaderText("Do you want to add new piece ?");
+                alert.setContentText("Chose ok to add , Cancel to abort");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    addingNewPiece=true;
+                } else {
+                   moveExisting=true;
+                }
             }
             else if (humanPlayer.getPiecesReadyToEnterIntoBoard()==7) {
                 addingNewPiece = true;
@@ -130,27 +142,32 @@ public class RoyalGameOfUr extends Application {
                 moveExisting=true;
             }
 
+            int diceRoll = processor.generateDiceRoll();
+            System.out.println(" Dice roll: " + diceRoll);
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Dice roll in this move");
+            alert.setHeaderText(null);
+            alert.setContentText("Your dice roll in this move is " + diceRoll);
+            alert.showAndWait();
+
+
             if(addingNewPiece) {
 
-                int diceRoll = processor.generateDiceRoll();
-                System.out.println(" Dice roll: " + diceRoll);
+                processor.insertNewPiece(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,diceRoll);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Dice roll in this move");
-                alert.setHeaderText(null);
-                alert.setContentText("Your dice roll is " + diceRoll);
-                alert.showAndWait();
-
-                processor.insertNewPiece(humanPlayer,computerPlayer,gameBoardPanel,diceRoll);
-
-
+                playerMove = false;
             }
 
             if(moveExisting) {
-
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Choosing piece to move");
+                alert.setHeaderText(null);
+                alert.setContentText("Click on piece that should be moved");
+                alert.showAndWait();
             }
 
-            playerMove = false;
+
 
         });
 

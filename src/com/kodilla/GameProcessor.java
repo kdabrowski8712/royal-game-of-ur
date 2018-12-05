@@ -144,7 +144,7 @@ public class GameProcessor {
     }
 
 
-    public void insertNewPiece(GenericPlayer player , GenericPlayer oponent , GameBoardPanel board, int move) {
+    public void insertNewPiece(GenericPlayer player , GenericPlayer oponent , GameBoardPanel board, HistoryPanel history,  int move) {
 
         int newCol=0;
         int newRow=0;
@@ -183,6 +183,10 @@ public class GameProcessor {
                     p.setOnBoard(true);
                     p.setRowPositionOnBoard(newRow);
                     p.setColumnPositionOnBoard(newCol);
+
+                    history.addEntry("Player " + player.getNick() + " captured " + oponent.getNick() + "on position {" +
+                            newCol + "," + newRow + ")");
+
                 }
                 else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -198,6 +202,9 @@ public class GameProcessor {
                 p.setOnBoard(true);
                 p.setColumnPositionOnBoard(newCol);
                 p.setRowPositionOnBoard(newRow);
+
+                history.addEntry("Player " + player.getNick() + " added piece on position ("
+                        + newCol + "," + newRow + ")"   );
             }
         }
 
