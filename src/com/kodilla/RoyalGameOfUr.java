@@ -11,10 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 public class RoyalGameOfUr extends Application {
@@ -132,37 +128,29 @@ public class RoyalGameOfUr extends Application {
             }
 
             diceRoll = processor.generateDiceRoll();
-           // System.out.println(" Dice roll: " + diceRoll);
             statisticsPanel.updateHumanDiceRoll(diceRoll);
-
-            //alert = generateAlert("Dice roll in this move",null,
-             //       "Your dice roll in this move is " + diceRoll, Alert.AlertType.INFORMATION);
-
-            //alert.showAndWait();
-
 
             if(addingNewPiece) {
 
                 processor.insertNewPiece(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
-
                 playerMove = false;
 
                 diceRoll = processor.generateDiceRoll();
                 statisticsPanel.updateComputerDiceRoll(diceRoll);
+
                 boolean computerMove = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
 
                 if(!computerMove) {
                     processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
                 }
 
-
-                // tu logika komputera
             }
 
             if(moveExisting) {
                 if(diceRoll==0) {
                     alert = generateAlert("No moves possible", null,
                             "0 in dice roll. No moves possible", Alert.AlertType.INFORMATION);
+                    alert.showAndWait();
                 }
                 else {
                     alert = generateAlert("Choosing piece to move", null,
@@ -175,8 +163,6 @@ public class RoyalGameOfUr extends Application {
 
         });
 
-
-
     }
 
     private void setEventHandlerOnPieces() {
@@ -188,44 +174,30 @@ public class RoyalGameOfUr extends Application {
                 System.out.println("Column : " + GridPane.getColumnIndex(current));
                 System.out.println("Row : " + GridPane.getRowIndex(current));
 
-                processor.movePieceHuman(GridPane.getColumnIndex(current),GridPane.getRowIndex(current),humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
-
-                playerMove=false;
+                if(diceRoll!=0) {
+                    processor.movePieceHuman(GridPane.getColumnIndex(current), GridPane.getRowIndex(current), humanPlayer, computerPlayer, gameBoardPanel, historyPanel, statisticsPanel, diceRoll);
+                }
 
                 diceRoll = processor.generateDiceRoll();
                 statisticsPanel.updateComputerDiceRoll(diceRoll);
+
                 boolean computerMoved = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
 
                 if(!computerMoved) {
                     processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
                 }
 
-                boolean computerWin = processor.checkWinCondition(computerPlayer);
-                boolean humanWin = processor.checkWinCondition(humanPlayer);
-
-                if(computerWin) {
+                if(computerPlayer.checkWinCondition()) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 }
-                if(humanWin) {
+                if(humanPlayer.checkWinCondition()) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 }
 
-            }
-
-            gameBoardPanel.getNewMoveButton().setDisable(false);
-
-            boolean computerWin = processor.checkWinCondition(computerPlayer);
-            boolean humanWin = processor.checkWinCondition(humanPlayer);
-
-            if(computerWin) {
-                historyPanel.addEntry("Computer win this game !!");
-                gameBoardPanel.getNewMoveButton().setDisable(true);
-            }
-            if(humanWin) {
-                historyPanel.addEntry("Computer win this game !!");
-                gameBoardPanel.getNewMoveButton().setDisable(true);
+                playerMove=false;
+                gameBoardPanel.getNewMoveButton().setDisable(false);
             }
 
         };

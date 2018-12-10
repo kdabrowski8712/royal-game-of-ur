@@ -1,6 +1,5 @@
 package com.kodilla;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,8 +15,6 @@ public class HistoryPanel {
     private ListView<String> histView;
     private ObservableList<String> histValues;
 
-
-
     private String cssLayout4 = "-fx-border-color: black;\n" +
             "-fx-border-insets: 5;\n" +
             "-fx-border-width: 1;\n" +
@@ -30,7 +27,7 @@ public class HistoryPanel {
         titleLabel = new Label("MOVES HISTORY");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 26");
 
-        histView = new ListView<String>();
+        histView = new ListView<>();
         histView.getItems().add("No records");
     }
 
@@ -42,7 +39,7 @@ public class HistoryPanel {
         result.setPadding(new Insets(5 , 10 ,10 ,10 ));
         result.setSpacing(8);
         result.setStyle(cssLayout4);
-        result.setPrefWidth(400);
+        result.setPrefWidth(450);
 
         titleBox.getChildren().add(titleLabel);
         result.getChildren().add(titleBox);
@@ -57,7 +54,6 @@ public class HistoryPanel {
 
     public void clear() {
         this.histView.getItems().remove(0,histView.getItems().size());
-        //this.histView.getItems().add("No records");
     }
 
 }

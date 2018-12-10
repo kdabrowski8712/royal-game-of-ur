@@ -117,4 +117,13 @@ public abstract class GenericPlayer {
         return nrOfPiecesMoved;
     }
 
+    public boolean checkWinCondition() {
+        boolean win = false;
+
+        if(this.getNrOfPiecesMoved()==7) {
+            win = true;
+        }
+
+        return  win;
+    }
 }
