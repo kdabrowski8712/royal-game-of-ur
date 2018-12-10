@@ -25,12 +25,18 @@ public class StatisticsPanel {
     private Label hPiecesLeftTitle;
     private Label cPiecesCLearedTitle;
     private Label cPiecesLeftTitle;
+    private Label diceRollhumanTitle;
+    private Label diceRollHuman;
+    private Label diceRollComputerTitle;
+    private Label diceRollComputer;
     private HBox titleBox;
     private HBox hPiecesClearedBox;
     private HBox hPiecesLeftBox;
     private HBox nrOfGamesBox;
     private HBox cPiecesClearedBox;
     private HBox cPiecesLeftBox;
+    private HBox diceRollHumanBox;
+    private HBox diceRollComputerBox;
 
 
     private String cssLayout = "-fx-border-color: black;\n" +
@@ -54,6 +60,15 @@ public class StatisticsPanel {
         this.hPiecesClearedBox = new HBox();
         this.hPiecesLeftBox = new HBox();
         this.hPiecesLeftBox.setSpacing(30);
+
+        //diceRollComputerBox = new HBox();
+        //diceRollHumanBox = new HBox();
+
+        diceRollComputerTitle = new Label("Dice roll in current move - computer: ");
+        diceRollhumanTitle = new Label("Dice roll in current move - human: ");
+
+        diceRollComputer = new Label("0");
+        diceRollHuman = new Label("0");
 
         titleLabel = new Label("STATISTICS");
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 26");
@@ -116,15 +131,21 @@ public class StatisticsPanel {
         result.getChildren().add(this.hPiecesClearedBox);
         result.getChildren().add(this.hPiecesLeftBox);
 
+        diceRollHumanBox = generateTwoLabelPair(diceRollhumanTitle,diceRollHuman);
+
+        result.getChildren().add(diceRollHumanBox);
+
         result.getChildren().add(computerLabel);
         this.cPiecesClearedBox = generateTwoLabelPair(this.cPiecesCLearedTitle,this.computerPiecesCleared);
         this.cPiecesLeftBox = generateTwoLabelPair(this.cPiecesLeftTitle, this.computerPiecesLeft);
         HBox.setMargin(computerPiecesLeft,new Insets(0,0,0,20));
 
-
         result.getChildren().add(this.cPiecesClearedBox);
         result.getChildren().add(this.cPiecesLeftBox);
 
+        diceRollComputerBox = generateTwoLabelPair(diceRollComputerTitle,diceRollComputer);
+
+        result.getChildren().add(diceRollComputerBox);
         return result;
     }
 
@@ -139,6 +160,14 @@ public class StatisticsPanel {
         humanPiecesLeft.setText("7");
         computerPiecesLeft.setText("7");
         computerPiecesCleared.setText("0");
+    }
+
+    public void updateHumanDiceRoll(int val) {
+        this.diceRollHuman.setText(String.valueOf(val));
+    }
+
+    public void updateComputerDiceRoll(int val) {
+        this.diceRollComputer.setText(String.valueOf(val));
     }
 
     public void increaseGameCounter() {

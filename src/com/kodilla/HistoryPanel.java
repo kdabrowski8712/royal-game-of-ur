@@ -42,7 +42,7 @@ public class HistoryPanel {
         result.setPadding(new Insets(5 , 10 ,10 ,10 ));
         result.setSpacing(8);
         result.setStyle(cssLayout4);
-        result.setPrefWidth(300);
+        result.setPrefWidth(400);
 
         titleBox.getChildren().add(titleLabel);
         result.getChildren().add(titleBox);

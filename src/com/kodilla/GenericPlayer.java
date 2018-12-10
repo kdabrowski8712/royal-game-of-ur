@@ -58,13 +58,6 @@ public abstract class GenericPlayer {
         return  result;
     }
 
-    public int getPiecesMoved() {
-        int result = 0;
-
-
-        return result;
-    }
-
     public Piece getPieceByCoordinates(int x , int y) {
         Piece result = null;
         boolean found = false;
@@ -123,14 +116,5 @@ public abstract class GenericPlayer {
     public int getNrOfPiecesMoved() {
         return nrOfPiecesMoved;
     }
-
-    public void setNrOfPiecesLeft(int nrOfPiecesLeft) {
-        this.nrOfPiecesLeft = nrOfPiecesLeft;
-    }
-
-    public void setNrOfPiecesMoved(int nrOfPiecesMoved) {
-        this.nrOfPiecesMoved = nrOfPiecesMoved;
-    }
-
 
 }

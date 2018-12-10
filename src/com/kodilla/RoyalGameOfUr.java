@@ -51,24 +51,13 @@ public class RoyalGameOfUr extends Application {
         VBox histBox = this.historyPanel.generatePanel();
         VBox menuBox = gameMenu.initialize();
 
-        Piece p = new Piece(Color.BLACK);
-        this.gameBoardPanel.addPiece(p,0,0);
-        this.historyPanel.addEntry("test");
-
-        gameMenu.getNewMoveMenuItem().setOnAction(event -> {
-          //  this.gameBoardPanel.movePieceHuman(p,0,1);
-          //  this.historyPanel.addEntry("Piece moved from " + p.getColumnPositionOnBoard());
-            this.gameBoardPanel.addPiece(p,0,0);
-                }
-        );
-
         mainPane.setLeft(leftBox);
         mainPane.setTop(menuBox);
         mainPane.setCenter(gamePane);
         mainPane.setRight(histBox);
 
 
-        Scene scene2 = new Scene(mainPane,1600,950);
+        Scene scene2 = new Scene(mainPane,1600,1000);
 
         primaryStage.setTitle("Royal Game Of Ur");
         primaryStage.setScene(scene2);
@@ -77,15 +66,6 @@ public class RoyalGameOfUr extends Application {
         setEventHandlersForMenuAndButtons();
         setEventHandlerOnPieces();
 
-        List<String> test = new ArrayList<>();
-        test.add("1");
-        test.add("2");
-
-        Iterator<String> tIt = test.iterator();
-
-        while(tIt.hasNext()) {
-            System.out.println(tIt.next());
-        }
     }
 
     private void newGameCleaning() {
@@ -152,19 +132,31 @@ public class RoyalGameOfUr extends Application {
             }
 
             diceRoll = processor.generateDiceRoll();
-            System.out.println(" Dice roll: " + diceRoll);
+           // System.out.println(" Dice roll: " + diceRoll);
+            statisticsPanel.updateHumanDiceRoll(diceRoll);
 
-            alert = generateAlert("Dice roll in this move",null,
-                    "Your dice roll in this move is " + diceRoll, Alert.AlertType.INFORMATION);
+            //alert = generateAlert("Dice roll in this move",null,
+             //       "Your dice roll in this move is " + diceRoll, Alert.AlertType.INFORMATION);
 
-            alert.showAndWait();
+            //alert.showAndWait();
 
 
             if(addingNewPiece) {
 
-                processor.insertNewPieceHuman(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
+                processor.insertNewPiece(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
 
                 playerMove = false;
+
+                diceRoll = processor.generateDiceRoll();
+                statisticsPanel.updateComputerDiceRoll(diceRoll);
+                boolean computerMove = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
+
+                if(!computerMove) {
+                    processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
+                }
+
+
+                // tu logika komputera
             }
 
             if(moveExisting) {
@@ -180,9 +172,6 @@ public class RoyalGameOfUr extends Application {
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 }
             }
-
-
-
 
         });
 
@@ -203,9 +192,42 @@ public class RoyalGameOfUr extends Application {
 
                 playerMove=false;
 
+                diceRoll = processor.generateDiceRoll();
+                statisticsPanel.updateComputerDiceRoll(diceRoll);
+                boolean computerMoved = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
+
+                if(!computerMoved) {
+                    processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
+                }
+
+                boolean computerWin = processor.checkWinCondition(computerPlayer);
+                boolean humanWin = processor.checkWinCondition(humanPlayer);
+
+                if(computerWin) {
+                    historyPanel.addEntry("Computer win this game !!");
+                    gameBoardPanel.getNewMoveButton().setDisable(true);
+                }
+                if(humanWin) {
+                    historyPanel.addEntry("Computer win this game !!");
+                    gameBoardPanel.getNewMoveButton().setDisable(true);
+                }
+
             }
 
             gameBoardPanel.getNewMoveButton().setDisable(false);
+
+            boolean computerWin = processor.checkWinCondition(computerPlayer);
+            boolean humanWin = processor.checkWinCondition(humanPlayer);
+
+            if(computerWin) {
+                historyPanel.addEntry("Computer win this game !!");
+                gameBoardPanel.getNewMoveButton().setDisable(true);
+            }
+            if(humanWin) {
+                historyPanel.addEntry("Computer win this game !!");
+                gameBoardPanel.getNewMoveButton().setDisable(true);
+            }
+
         };
 
        for(Piece p : humanPlayer.getPlayerPieces()) {
