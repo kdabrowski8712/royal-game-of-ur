@@ -1,15 +1,15 @@
 package com.kodilla;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class RoyalGameOfUr extends Application {
     private Computer computerPlayer;
     private boolean playerMove;
     private GameProcessor processor;
+    private int diceRoll =0;
 
 
     @Override
@@ -55,7 +56,7 @@ public class RoyalGameOfUr extends Application {
         this.historyPanel.addEntry("test");
 
         gameMenu.getNewMoveMenuItem().setOnAction(event -> {
-          //  this.gameBoardPanel.movePiece(p,0,1);
+          //  this.gameBoardPanel.movePieceHuman(p,0,1);
           //  this.historyPanel.addEntry("Piece moved from " + p.getColumnPositionOnBoard());
             this.gameBoardPanel.addPiece(p,0,0);
                 }
@@ -73,7 +74,8 @@ public class RoyalGameOfUr extends Application {
         primaryStage.setScene(scene2);
         primaryStage.show();
 
-        setEventHandlersForMenu();
+        setEventHandlersForMenuAndButtons();
+        setEventHandlerOnPieces();
 
         List<String> test = new ArrayList<>();
         test.add("1");
@@ -95,7 +97,16 @@ public class RoyalGameOfUr extends Application {
         computerPlayer.resetPlayer();
     }
 
-    private void setEventHandlersForMenu() {
+    private Alert generateAlert(String title, String header, String content , Alert.AlertType type) {
+        Alert res = new Alert(type);
+        res.setTitle(title);
+        res.setHeaderText(header);
+        res.setContentText(content);
+
+        return res;
+    }
+
+    private void setEventHandlersForMenuAndButtons() {
 
         gameMenu.getNewGameMenuItem().setOnAction(event -> {
                     newGameCleaning();
@@ -123,10 +134,8 @@ public class RoyalGameOfUr extends Application {
             Alert alert = null;
 
             if(humanPlayer.getPiecesReadyToEnterIntoBoard()>0 && humanPlayer.getPiecesReadyToEnterIntoBoard()<7) {
-                alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Add new piece Question");
-                alert.setHeaderText("Do you want to add new piece ?");
-                alert.setContentText("Chose ok to add , Cancel to abort");
+                alert = generateAlert("Add new piece Question","Do you want to add new piece ?",
+                        "Chose ok to add , Cancel to move piece", Alert.AlertType.CONFIRMATION);
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
@@ -142,36 +151,66 @@ public class RoyalGameOfUr extends Application {
                 moveExisting=true;
             }
 
-            int diceRoll = processor.generateDiceRoll();
+            diceRoll = processor.generateDiceRoll();
             System.out.println(" Dice roll: " + diceRoll);
 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Dice roll in this move");
-            alert.setHeaderText(null);
-            alert.setContentText("Your dice roll in this move is " + diceRoll);
+            alert = generateAlert("Dice roll in this move",null,
+                    "Your dice roll in this move is " + diceRoll, Alert.AlertType.INFORMATION);
+
             alert.showAndWait();
 
 
             if(addingNewPiece) {
 
-                processor.insertNewPiece(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,diceRoll);
+                processor.insertNewPieceHuman(humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
 
                 playerMove = false;
             }
 
             if(moveExisting) {
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Choosing piece to move");
-                alert.setHeaderText(null);
-                alert.setContentText("Click on piece that should be moved");
-                alert.showAndWait();
+                if(diceRoll==0) {
+                    alert = generateAlert("No moves possible", null,
+                            "0 in dice roll. No moves possible", Alert.AlertType.INFORMATION);
+                }
+                else {
+                    alert = generateAlert("Choosing piece to move", null,
+                            "Click on piece that should be moved", Alert.AlertType.INFORMATION);
+
+                    alert.showAndWait();
+                    gameBoardPanel.getNewMoveButton().setDisable(true);
+                }
             }
+
 
 
 
         });
 
 
+
+    }
+
+    private void setEventHandlerOnPieces() {
+
+        EventHandler<MouseEvent> circleClickEvent = (event) -> {
+
+            if(playerMove) {
+                Node current = (Node) event.getSource();
+                System.out.println("Column : " + GridPane.getColumnIndex(current));
+                System.out.println("Row : " + GridPane.getRowIndex(current));
+
+                processor.movePieceHuman(GridPane.getColumnIndex(current),GridPane.getRowIndex(current),humanPlayer,computerPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
+
+                playerMove=false;
+
+            }
+
+            gameBoardPanel.getNewMoveButton().setDisable(false);
+        };
+
+       for(Piece p : humanPlayer.getPlayerPieces()) {
+           p.getPieceRepresentation().setOnMouseClicked(circleClickEvent);
+       }
 
     }
 

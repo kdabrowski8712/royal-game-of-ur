@@ -32,6 +32,7 @@ public class GameBoardPanel {
     private Label row6Label;
     private Label row7Label;
     private Button newMoveButton;
+    private Label diceRollLabel;
 
     public GameBoardPanel() {
         boardFields = new ArrayList<>();
@@ -53,7 +54,7 @@ public class GameBoardPanel {
 
         newMoveButton = new Button("New move");
         newMoveButton.setDisable(true);
-
+        diceRollLabel = new Label("Dice roll in this move : 0");
 
         column0Label.setStyle(style);
         column1Label.setStyle(style);
@@ -155,6 +156,7 @@ public class GameBoardPanel {
         GridPane.setHalignment(newMoveButton,HPos.CENTER);
         GridPane.setMargin(newMoveButton, new Insets(10,0,0,0));
 
+        //gamePane.add(diceRollLabel,4,9);
 
         return gamePane;
     }

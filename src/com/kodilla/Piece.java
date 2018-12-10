@@ -10,6 +10,8 @@ public class Piece {
     private boolean isMovedThroughBoard;
     private Circle pieceRepresentation;
     private Color pieceColor;
+    private int possibleNewRow;
+    private int getPossibleNewColumn;
 
     public Piece(Color color) {
         pieceRepresentation =  new Circle(20 , color);
@@ -69,5 +71,21 @@ public class Piece {
 
     public void setMovedThroughBoard(boolean movedThroughBoard) {
         isMovedThroughBoard = movedThroughBoard;
+    }
+
+    public int getPossibleNewRow() {
+        return possibleNewRow;
+    }
+
+    public void setPossibleNewRow(int possibleNewRow) {
+        this.possibleNewRow = possibleNewRow;
+    }
+
+    public int getPossibleNewColumn() {
+        return getPossibleNewColumn;
+    }
+
+    public void setPossibleNewColumn(int getPossibleNewColumn) {
+        this.getPossibleNewColumn = getPossibleNewColumn;
     }
 }

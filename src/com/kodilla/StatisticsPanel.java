@@ -46,6 +46,8 @@ public class StatisticsPanel {
         computerPiecesLeft = new Label("7");
         computerPiecesCleared = new Label("0");
 
+
+
         titleBox = new HBox();
         titleBox.setAlignment(Pos.CENTER);
 
@@ -103,17 +105,22 @@ public class StatisticsPanel {
         result.getChildren().add(this.titleBox);
         result.getChildren().add(this.overallLabel);
         this.nrOfGamesBox = generateTwoLabelPair(this.nrOfGamesTitle,this.nrOfGamesValue);
+       // HBox.setMargin(nrOfGamesValue,new Insets(0,0,0,0));
         result.getChildren().add(this.nrOfGamesBox);
 
         result.getChildren().add(this.playerLabel);
         this.hPiecesClearedBox = generateTwoLabelPair(this.hPiecesCLearedTitle,humaanPiecesCleared);
         this.hPiecesLeftBox = generateTwoLabelPair(this.hPiecesLeftTitle, humanPiecesLeft);
+        HBox.setMargin(humanPiecesLeft,new Insets(0,0,0,20));
+
         result.getChildren().add(this.hPiecesClearedBox);
         result.getChildren().add(this.hPiecesLeftBox);
 
         result.getChildren().add(computerLabel);
         this.cPiecesClearedBox = generateTwoLabelPair(this.cPiecesCLearedTitle,this.computerPiecesCleared);
         this.cPiecesLeftBox = generateTwoLabelPair(this.cPiecesLeftTitle, this.computerPiecesLeft);
+        HBox.setMargin(computerPiecesLeft,new Insets(0,0,0,20));
+
 
         result.getChildren().add(this.cPiecesClearedBox);
         result.getChildren().add(this.cPiecesLeftBox);
@@ -140,13 +147,20 @@ public class StatisticsPanel {
         nrOfGamesValue.setText(String.valueOf(tempVal));
     }
 
-    public void updateCurrentGameStatistics(Human hPlayer , Computer cPlayer) {
+    public void updateCurrentGameStatistics(GenericPlayer player) {
 
-        this.humaanPiecesCleared.setText(String.valueOf(hPlayer.getNrOfPiecesMoved()));
-        this.humanPiecesLeft.setText(String.valueOf(hPlayer.getNrOfPiecesLeft()));
-        this.computerPiecesCleared.setText(String.valueOf(cPlayer.getNrOfPiecesMoved()));
-        this.computerPiecesLeft.setText(String.valueOf(cPlayer.getNrOfPiecesLeft()));
+
+        if(player instanceof Human) {
+            this.humaanPiecesCleared.setText(String.valueOf(player.getNrOfPiecesMoved()));
+            this.humanPiecesLeft.setText(String.valueOf(player.getNrOfPiecesLeft()));
+        }
+        else {
+            this.computerPiecesCleared.setText(String.valueOf(player.getNrOfPiecesMoved()));
+            this.computerPiecesLeft.setText(String.valueOf(player.getNrOfPiecesLeft()));
+        }
     }
+
+
 
 
     public Label getNrOfGamesValue() {
