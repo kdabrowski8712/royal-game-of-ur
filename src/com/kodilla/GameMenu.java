@@ -8,26 +8,25 @@ import javafx.scene.layout.VBox;
 public class GameMenu {
     private MenuBar gameMenuBar;
     private Menu gameMenu;
-   // private MenuItem newMove;
     private MenuItem newGame;
+    private MenuItem gameSettings;
 
     private VBox manuBox;
 
     public GameMenu() {
         gameMenuBar = new MenuBar();
         gameMenu = new Menu("Game");
-      //  newMove = new MenuItem("New move");
         newGame = new MenuItem("New game");
-     //   newMove.setDisable(true);
+        gameSettings = new MenuItem("Game Settings");
+
     }
 
     public VBox initialize() {
         VBox result = new VBox();
         this.manuBox = result;
 
-        //.getItems().add(newMove);
+        gameMenu.getItems().add(gameSettings);
         gameMenu.getItems().add(newGame);
-
         gameMenuBar.getMenus().add(gameMenu);
 
         result.getChildren().add(gameMenuBar);
@@ -35,11 +34,12 @@ public class GameMenu {
         return result;
     }
 
-   // public MenuItem getNewMoveMenuItem() {
-    //    return newMove;
-   // }
 
     public MenuItem getNewGameMenuItem() {
         return newGame;
+    }
+
+    public MenuItem getGameSettings() {
+        return gameSettings;
     }
 }

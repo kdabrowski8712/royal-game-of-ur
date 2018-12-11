@@ -1,8 +1,11 @@
 package com.kodilla;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -92,55 +95,40 @@ public class StatisticsPanel {
 
     }
 
-    private HBox generateTwoLabelPair(Label label1 , Label label2) {
-        HBox result = new HBox();
-        result.setSpacing(10);
-        result.getChildren().add(label1);
-        result.getChildren().add(label2);
+    public GridPane generatePanel2() {
 
-        return result;
-    }
+        GridPane result = new GridPane();
 
-    public VBox generatePanel() {
-        VBox result = new VBox();
-        this.panel = result;
+        result.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
+        result.setHgap(20);
+        result.setVgap(10);
 
-        result.setPadding(new Insets(5 , 10 ,10 ,10 ));
-        result.setSpacing(8);
         result.setStyle(cssLayout);
-        result.setPrefWidth(300);
 
-        this.titleBox.getChildren().add(this.titleLabel);
+        result.add(titleLabel,0,0);
+        GridPane.setColumnSpan(titleLabel,2);
+        GridPane.setHalignment(titleLabel, HPos.CENTER);
 
-        result.getChildren().add(this.titleBox);
-        result.getChildren().add(this.overallLabel);
-        this.nrOfGamesBox = generateTwoLabelPair(this.nrOfGamesTitle,this.nrOfGamesValue);
-       // HBox.setMargin(nrOfGamesValue,new Insets(0,0,0,0));
-        result.getChildren().add(this.nrOfGamesBox);
+        result.add(overallLabel,0,1);
+        result.add(nrOfGamesTitle,0,2);
+        result.add(nrOfGamesValue,1,2);
+        result.add(playerLabel,0,3);
+        result.add(hPiecesCLearedTitle,0,4);
+        result.add(humaanPiecesCleared,1,4);
+        result.add(hPiecesLeftTitle,0,5);
+        result.add(humanPiecesLeft,1,5);
+        result.add(diceRollhumanTitle,0,6);
+        result.add(diceRollHuman,1,6);
 
-        result.getChildren().add(this.playerLabel);
-        this.hPiecesClearedBox = generateTwoLabelPair(this.hPiecesCLearedTitle,humaanPiecesCleared);
-        this.hPiecesLeftBox = generateTwoLabelPair(this.hPiecesLeftTitle, humanPiecesLeft);
-        HBox.setMargin(humanPiecesLeft,new Insets(0,0,0,20));
+        result.add(computerLabel,0,7);
+        result.add(cPiecesCLearedTitle,0,8);
+        result.add(computerPiecesCleared,1,8);
+        result.add(cPiecesLeftTitle,0,9);
+        result.add(computerPiecesLeft,1,9);
 
-        result.getChildren().add(this.hPiecesClearedBox);
-        result.getChildren().add(this.hPiecesLeftBox);
+        result.add(diceRollComputerTitle,0,10);
+        result.add(diceRollComputer,1,10);
 
-        diceRollHumanBox = generateTwoLabelPair(diceRollhumanTitle,diceRollHuman);
-
-        result.getChildren().add(diceRollHumanBox);
-
-        result.getChildren().add(computerLabel);
-        this.cPiecesClearedBox = generateTwoLabelPair(this.cPiecesCLearedTitle,this.computerPiecesCleared);
-        this.cPiecesLeftBox = generateTwoLabelPair(this.cPiecesLeftTitle, this.computerPiecesLeft);
-        HBox.setMargin(computerPiecesLeft,new Insets(0,0,0,20));
-
-        result.getChildren().add(this.cPiecesClearedBox);
-        result.getChildren().add(this.cPiecesLeftBox);
-
-        diceRollComputerBox = generateTwoLabelPair(diceRollComputerTitle,diceRollComputer);
-
-        result.getChildren().add(diceRollComputerBox);
         return result;
     }
 
