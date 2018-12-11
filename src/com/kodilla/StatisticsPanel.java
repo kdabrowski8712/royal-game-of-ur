@@ -52,8 +52,6 @@ public class StatisticsPanel {
         computerPiecesLeft = new Label("7");
         computerPiecesCleared = new Label("0");
 
-
-
         titleBox = new HBox();
         titleBox.setAlignment(Pos.CENTER);
 
@@ -61,8 +59,6 @@ public class StatisticsPanel {
         this.hPiecesLeftBox = new HBox();
         this.hPiecesLeftBox.setSpacing(30);
 
-        //diceRollComputerBox = new HBox();
-        //diceRollHumanBox = new HBox();
 
         diceRollComputerTitle = new Label("Dice roll in current move - computer: ");
         diceRollhumanTitle = new Label("Dice roll in current move - human: ");
@@ -99,7 +95,6 @@ public class StatisticsPanel {
     private HBox generateTwoLabelPair(Label label1 , Label label2) {
         HBox result = new HBox();
         result.setSpacing(10);
-       // result.setAlignment(Pos.L);
         result.getChildren().add(label1);
         result.getChildren().add(label2);
 
@@ -188,49 +183,5 @@ public class StatisticsPanel {
             this.computerPiecesLeft.setText(String.valueOf(player.getNrOfPiecesLeft()));
         }
     }
-
-
-
-
-    public Label getNrOfGamesValue() {
-        return nrOfGamesValue;
-    }
-
-    public void setNrOfGamesValue(Label nrOfGamesValue) {
-        this.nrOfGamesValue = nrOfGamesValue;
-    }
-
-    public Label getHumaanPiecesCleared() {
-        return humaanPiecesCleared;
-    }
-
-    public void setHumaanPiecesCleared(Label humaanPiecesCleared) {
-        this.humaanPiecesCleared = humaanPiecesCleared;
-    }
-
-    public Label getHumanPiecesLeft() {
-        return humanPiecesLeft;
-    }
-
-    public void setHumanPiecesLeft(Label humanPiecesLeft) {
-        this.humanPiecesLeft = humanPiecesLeft;
-    }
-
-    public Label getComputerPiecesLeft() {
-        return computerPiecesLeft;
-    }
-
-    public void setComputerPiecesLeft(Label computerPiecesLeft) {
-        this.computerPiecesLeft = computerPiecesLeft;
-    }
-
-    public Label getComputerPiecesCleared() {
-        return computerPiecesCleared;
-    }
-
-    public void setComputerPiecesCleared(Label computerPiecesCleared) {
-        this.computerPiecesCleared = computerPiecesCleared;
-    }
-
 
 }

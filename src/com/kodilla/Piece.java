@@ -57,13 +57,6 @@ public class Piece {
         return pieceRepresentation;
     }
 
-    public void setPieceRepresentation(Circle pieceRepresentation) {
-        this.pieceRepresentation = pieceRepresentation;
-    }
-
-    public Color getPieceColor() {
-        return pieceColor;
-    }
 
     public boolean isMovedThroughBoard() {
         return isMovedThroughBoard;

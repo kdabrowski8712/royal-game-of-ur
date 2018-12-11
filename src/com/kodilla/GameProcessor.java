@@ -48,7 +48,7 @@ public class GameProcessor {
         return isOnRosette;
     }
 
-    private boolean checkIfOnBattleField(int column, int row) {
+    private boolean checkIfOnBattleField(int column) {
         boolean isOnBattleField = false;
 
         if (column == 1) {
@@ -162,6 +162,151 @@ public class GameProcessor {
         return result;
     }
 
+    private void commonMoveInsertActions(Piece p, GenericPlayer player, GenericPlayer oponent, StatisticsPanel statisticsPanel,
+                                         GameBoardPanel board, HistoryPanel history, int newRow, int newCol, boolean insertFlag) {
+
+        boolean isOnBattleField;
+        boolean isOnRosette;
+
+        isOnBattleField = checkIfOnBattleField(newCol);
+        isOnRosette = checkRosette(newCol, newRow);
+
+        if(isOnBattleField) {
+            if ( !isOnRosette) {
+                Piece oponentPiece = oponent.getPieceByCoordinates(newCol, newRow);
+                board.removePiece(oponentPiece);
+                oponentPiece.setOnBoard(false);
+                oponentPiece.resetPosition(oponent);
+                oponent.piecesStatisticRecalculation();
+                statisticsPanel.updateCurrentGameStatistics(oponent);
+                if (insertFlag) {
+                    board.movePiece(p, newRow, newCol);
+                } else {
+                    board.addPiece(p, newRow, newCol);
+                    p.setOnBoard(true);
+                }
+                p.setRowPositionOnBoard(newRow);
+                p.setColumnPositionOnBoard(newCol);
+
+                if (player instanceof Human) {
+                    history.addEntry("Player " + player.getNick() + " captured " + oponent.getNick() + "on position {" +
+                            newCol + "," + newRow + ")");
+                } else {
+                    history.addEntry("Computer  captured " + oponent.getNick() + " on position (" +
+                            newCol + "," + newRow + ")");
+                }
+
+            } else  {
+
+                if (player instanceof Human) {
+                    Alert alert = generateAlert("Rosette Alert", null,
+                            "You can not capture oponent piece to position (" + newCol + "," + newRow + ") - rosette field.", Alert.AlertType.INFORMATION);
+                    alert.showAndWait();
+                } else {
+
+                    history.addEntry("Computer could not capture oponent piece to position (" + newCol + "," + newRow + " ) - rosette field.");
+                }
+
+            }
+        }
+
+    }
+
+    private Piece getPieceClosestToExit(List<Piece> input) {
+        Piece result = null;
+        int lastDistance = 0;
+        int actualDistance = 0;
+
+        for(Piece p : input) {
+            actualDistance = getDistanceBetweenComputerPiecePositionAndEndOfBoard(p.getColumnPositionOnBoard(),p.getRowPositionOnBoard());
+            if(lastDistance==0) {
+                lastDistance = actualDistance;
+                result = p;
+            }
+            else {
+                if(actualDistance<lastDistance) {
+                    lastDistance = actualDistance;
+                    result = p;
+                }
+            }
+        }
+
+
+        return  result;
+    }
+
+    private List<Piece> returnComputerPossibleMoves(Computer computer, int move) {
+        List<Piece> result = new ArrayList<>();
+        int newColumn;
+        int newRow;
+        boolean isOffTheBoard;
+        boolean isIncollisionWithPlayer;
+
+        for(Piece p : computer.getPlayerPieces()) {
+
+            if(p.isOnBoard()) {
+                newColumn = generateNewColumnCoordinate(p.getColumnPositionOnBoard(), p.getRowPositionOnBoard(), move, computer);
+                newRow = generateNewRowCoordinate(p.getColumnPositionOnBoard(), p.getRowPositionOnBoard(), move, computer);
+
+                isOffTheBoard = checkIfPieceMovedTooFar(p.getColumnPositionOnBoard(),p.getRowPositionOnBoard(),move);
+                isIncollisionWithPlayer = checkCollision(newColumn, newRow, computer.getPlayerPieces());
+
+                if (!isIncollisionWithPlayer && !isOffTheBoard) {
+                    result.add(p);
+                    p.setPossibleNewColumn(newColumn);
+                    p.setPossibleNewRow(newRow);
+                }
+            }
+
+        }
+
+
+        return  result;
+    }
+
+    private Piece returnComputerPieceToRemove (List<Piece> input , int move, Computer computer) {
+        Piece result = null;
+        boolean end = false;
+        boolean canBeMoved = false;
+
+        Iterator<Piece> pieceIterator = input.iterator();
+
+        while(!end && pieceIterator.hasNext()) {
+            Piece p = pieceIterator.next();
+
+            canBeMoved = checkIfPieceSuccesfullyMovedThroughBoard(p.getPossibleNewColumn(),p.getPossibleNewRow(),computer);
+
+            if(canBeMoved) {
+                end = true;
+                result = p;
+            }
+
+        }
+
+        return  result;
+    }
+
+    private int getDistanceBetweenComputerPiecePositionAndEndOfBoard(int column, int row) {
+        int result =0;
+        int difference;
+
+        if(column==2) {
+
+            if(row>=4){
+                difference = 7- row;
+                result=11+difference;
+            }
+            else if(row >=0 && row<1) {
+                result = 2 - row;
+            }
+
+        } else if(column==1) {
+            result=row+3;
+        }
+
+        return result;
+    }
+
     public int generateDiceRoll() {
         Random r = new Random();
         int result = 0;
@@ -171,64 +316,13 @@ public class GameProcessor {
         return result;
     }
 
-
-    private void commonMoveInsertActions(Piece p, GenericPlayer player, GenericPlayer oponent, StatisticsPanel statisticsPanel,
-                                         GameBoardPanel board, HistoryPanel history, int newRow, int newCol, boolean insertFlag) {
-
-        boolean isOnBattleField;
-        boolean isOnRosette;
-
-        isOnBattleField = checkIfOnBattleField(newCol, newRow);
-        isOnRosette = checkRosette(newCol, newRow);
-
-        if (isOnBattleField && !isOnRosette) {
-            Piece oponentPiece = oponent.getPieceByCoordinates(newCol, newRow);
-            board.removePiece(oponentPiece);
-            oponentPiece.setOnBoard(false);
-            oponentPiece.resetPosition(oponent);
-            oponent.piecesStatisticRecalculation();
-            statisticsPanel.updateCurrentGameStatistics(oponent);
-            if(insertFlag) {
-                board.movePiece(p, newRow, newCol);
-            }
-            else {
-                board.addPiece(p, newRow, newCol);
-                p.setOnBoard(true);
-            }
-            p.setRowPositionOnBoard(newRow);
-            p.setColumnPositionOnBoard(newCol);
-
-            if(player instanceof Human) {
-                history.addEntry("Player " + player.getNick() + " captured " + oponent.getNick() + "on position {" +
-                        newCol + "," + newRow + ")");
-            }
-            else {
-                history.addEntry("Computer  captured " + oponent.getNick() + "on position {" +
-                        newCol + "," + newRow + ")");
-            }
-
-        } else {
-
-            if(player instanceof Human) {
-                Alert alert = generateAlert("Rosette Alert", null,
-                        "Your cannot capture oponent piece to position (" + newCol + "," + newRow + ") in this move - rosette field.", Alert.AlertType.INFORMATION);
-                alert.showAndWait();
-            }
-            else {
-
-                history.addEntry("Computer could not capture oponent piece to position (" + newCol + "," + newRow + " ) in this move - rosette field.");
-            }
-
-        }
-
-    }
-
     public void insertNewPiece(GenericPlayer player, GenericPlayer oponent, GameBoardPanel board, HistoryPanel history, StatisticsPanel statisticsPanel, int move) {
 
         int newCol;
         int newRow;
         boolean isInCollisionWithPlayer;
         boolean isInCollisionWithOponent;
+        Alert alert;
 
         Piece p = player.getFreePiece();
 
@@ -239,13 +333,13 @@ public class GameProcessor {
 
         if (isInCollisionWithPlayer) {
             if(player instanceof Human) {
-                Alert alert = generateAlert("Collision Allert", null,
-                        "Your cannot put piece to position (" + newCol + "," + newRow + ") in this move - collision with another piece.", Alert.AlertType.INFORMATION);
+                alert = generateAlert("Collision Allert", null,
+                        "You can not put piece to position (" + newCol + "," + newRow + ") - collision with another piece.", Alert.AlertType.INFORMATION);
 
                 alert.showAndWait();
             }
             else {
-                history.addEntry("Computer could not put piece to position (" + newCol + "," + newRow + ") in this move - collision with another piece");
+                history.addEntry("Computer could not put piece to position (" + newCol + "," + newRow + ") - collision with another piece");
             }
         } else {
 
@@ -253,7 +347,6 @@ public class GameProcessor {
             if (isInCollisionWithOponent) {
 
                 commonMoveInsertActions(p, player, oponent, statisticsPanel, board, history, newRow, newCol,false);
-
 
             } else {
                 board.addPiece(p, newRow, newCol);
@@ -266,7 +359,7 @@ public class GameProcessor {
                             + newCol + "," + newRow + ")");
                 }
                 else {
-                    history.addEntry("Computer  added piece on position (" + newCol + "," + newRow + ")");
+                    history.addEntry("Computer added piece on position (" + newCol + "," + newRow + ")");
                 }
             }
         }
@@ -276,14 +369,14 @@ public class GameProcessor {
 
 
     public void movePieceHuman(int clickedPieceColumn, int clickedPieceRow, GenericPlayer player, GenericPlayer oponent, GameBoardPanel board, HistoryPanel history, StatisticsPanel stPanel, int move) {
-        int newCol = 0;
-        int newRow = 0;
-        int oldCol = 0;
-        int oldRow=0;
-        boolean isMovedFromBoard = false;
-        boolean cannotBeMovedTooFar = false;
-        boolean isInCollisionWithPlayer = false;
-        boolean isInCollisionWithOponent = false;
+        int newCol;
+        int newRow;
+        int oldCol;
+        int oldRow;
+        boolean isMovedFromBoard;
+        boolean cannotBeMovedTooFar;
+        boolean isInCollisionWithPlayer;
+        boolean isInCollisionWithOponent;
 
         Piece p = player.getPieceByCoordinates(clickedPieceColumn, clickedPieceRow);
 
@@ -320,7 +413,7 @@ public class GameProcessor {
 
                     if (isInCollisionWithPlayer) {
                         Alert alert = generateAlert("Collision Alert", null,
-                                "Your cannot put piece to position (" + newCol + "," + newRow + ") in this move - collision with another piece.", Alert.AlertType.INFORMATION);
+                                "You can not put piece to position (" + newCol + "," + newRow + ") -  collision with another piece.", Alert.AlertType.INFORMATION);
 
                         alert.showAndWait();
                     } else {
@@ -397,121 +490,6 @@ public class GameProcessor {
 
         return moved;
     }
-
-    private Piece getPieceClosestToExit(List<Piece> input) {
-        Piece result = null;
-        int lastDistance = 0;
-        int actualDistance = 0;
-
-        for(Piece p : input) {
-            actualDistance = getDistanceBetweenComputerPiecePositionAndEndOfBoard(p.getColumnPositionOnBoard(),p.getRowPositionOnBoard());
-            if(lastDistance==0) {
-                lastDistance = actualDistance;
-                result = p;
-            }
-            else {
-                if(actualDistance<lastDistance) {
-                    lastDistance = actualDistance;
-                    result = p;
-                }
-            }
-        }
-
-
-        return  result;
-    }
-
-    private List<Piece> returnComputerPossibleMoves(Computer computer, int move) {
-        List<Piece> result = new ArrayList<>();
-        int newColumn;
-        int newRow;
-        boolean isOffTheBoard;
-        boolean isIncollisionWithPlayer;
-
-        for(Piece p : computer.getPlayerPieces()) {
-
-            if(p.isOnBoard()) {
-                newColumn = generateNewColumnCoordinate(p.getColumnPositionOnBoard(), p.getRowPositionOnBoard(), move, computer);
-                newRow = generateNewRowCoordinate(p.getColumnPositionOnBoard(), p.getRowPositionOnBoard(), move, computer);
-
-                isOffTheBoard = checkIfPieceMovedTooFar(p.getColumnPositionOnBoard(),p.getRowPositionOnBoard(),move);
-                isIncollisionWithPlayer = checkCollision(newColumn, newRow, computer.getPlayerPieces());
-
-                if (!isIncollisionWithPlayer && !isOffTheBoard) {
-                    result.add(p);
-                    p.setPossibleNewColumn(newColumn);
-                    p.setPossibleNewRow(newRow);
-                }
-            }
-
-        }
-
-
-        return  result;
-    }
-
-    private Piece returnComputerPieceToRemove (List<Piece> input , int move, Computer computer) {
-        Piece result = null;
-        boolean end = false;
-        int newColumn;
-        int newRow;
-        boolean canBeMoved = false;
-
-        Iterator<Piece> pieceIterator = input.iterator();
-
-        while(!end && pieceIterator.hasNext()) {
-            Piece p = pieceIterator.next();
-
-            canBeMoved = checkIfPieceSuccesfullyMovedThroughBoard(p.getPossibleNewColumn(),p.getPossibleNewRow(),computer);
-
-            if(canBeMoved) {
-                end = true;
-                result = p;
-            }
-
-        }
-
-        return  result;
-    }
-
-    private int getDistanceBetweenComputerPiecePositionAndEndOfBoard(int column, int row) {
-        int result =0;
-        int difference;
-
-        if(column==2) {
-
-           if(row>=4){
-               difference = 7- row;
-               result=11+difference;
-           }
-           else if(row >=0 && row<1) {
-                result = 2 - row;
-           }
-
-        } else if(column==1) {
-            result=row+3;
-        }
-
-        return result;
-    }
-
-    public boolean checkWinCondition(GenericPlayer player) {
-        boolean win = false;
-
-        if(player.getNrOfPiecesMoved()==7) {
-            win = true;
-        }
-
-        return  win;
-    }
-
-
-
-
-
-
-
-
 }
 
 

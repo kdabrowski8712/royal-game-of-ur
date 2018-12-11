@@ -12,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,8 +114,6 @@ public class GameBoardPanel {
         gamePane.add(rosettas.get(2),0,7);
         gamePane.add(rosettas.get(3),2,7);
         gamePane.add(rosettas.get(4),1,4);
-
-
 
         gamePane.add(column0Label,0,8);
         GridPane.setHalignment(column0Label,HPos.CENTER);

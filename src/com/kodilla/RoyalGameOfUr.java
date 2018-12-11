@@ -111,7 +111,7 @@ public class RoyalGameOfUr extends Application {
 
             if(humanPlayer.getPiecesReadyToEnterIntoBoard()>0 && humanPlayer.getPiecesReadyToEnterIntoBoard()<7) {
                 alert = generateAlert("Add new piece Question","Do you want to add new piece ?",
-                        "Chose ok to add , Cancel to move piece", Alert.AlertType.CONFIRMATION);
+                        "Chose OK to add , Cancel to move piece", Alert.AlertType.CONFIRMATION);
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
@@ -149,7 +149,7 @@ public class RoyalGameOfUr extends Application {
             if(moveExisting) {
                 if(diceRoll==0) {
                     alert = generateAlert("No moves possible", null,
-                            "0 in dice roll. No moves possible", Alert.AlertType.INFORMATION);
+                            "0 in dice roll. No move possible", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
                 }
                 else {
@@ -181,9 +181,9 @@ public class RoyalGameOfUr extends Application {
                 diceRoll = processor.generateDiceRoll();
                 statisticsPanel.updateComputerDiceRoll(diceRoll);
 
-                boolean computerMoved = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
+                boolean computerMoveExecuted = processor.movePieceComputers(computerPlayer,humanPlayer,statisticsPanel,gameBoardPanel,historyPanel,diceRoll);
 
-                if(!computerMoved) {
+                if(!computerMoveExecuted) {
                     processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
                 }
 
@@ -191,13 +191,14 @@ public class RoyalGameOfUr extends Application {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 }
-                if(humanPlayer.checkWinCondition()) {
+                else if(humanPlayer.checkWinCondition()) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
-                }
+                } else {
 
-                playerMove=false;
-                gameBoardPanel.getNewMoveButton().setDisable(false);
+                    playerMove = false;
+                    gameBoardPanel.getNewMoveButton().setDisable(false);
+                }
             }
 
         };
