@@ -197,14 +197,17 @@ public class RoyalGameOfUr extends Application {
                 if(computerPlayer.checkWinCondition(gameSettings)) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
+                    gameMenu.getGameSettings().setDisable(false);
                 }
                 else if(humanPlayer.checkWinCondition(gameSettings)) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
+                    gameMenu.getGameSettings().setDisable(false);
                 } else {
 
                     playerMove = false;
                     gameBoardPanel.getNewMoveButton().setDisable(false);
+
                 }
             }
 

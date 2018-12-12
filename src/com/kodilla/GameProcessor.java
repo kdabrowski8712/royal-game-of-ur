@@ -107,7 +107,6 @@ public class GameProcessor {
                 result = 0 + restMoves;
             }
         }
-
         return result;
     }
 
@@ -197,10 +196,8 @@ public class GameProcessor {
 
                     history.addEntry("Computer could not capture oponent piece to position (" + newCol + "," + newRow + " ) - rosette field.");
                 }
-
             }
         }
-
     }
 
     private Piece getPieceClosestToExit(List<Piece> input) {
@@ -271,9 +268,7 @@ public class GameProcessor {
                 end = true;
                 result = p;
             }
-
         }
-
         return  result;
     }
 
@@ -354,8 +349,6 @@ public class GameProcessor {
                 }
             }
         }
-
-
     }
 
 
@@ -421,15 +414,10 @@ public class GameProcessor {
                             history.addEntry("Player " + player.getNick() + " moved piece from (" + oldCol + "," + oldRow + ") to (" + newCol + "," + newRow + ")");
 
                         }
-
                     }
                 }
-
             }
-
     }
-
-
 
     public boolean movePieceComputers(Computer computer, Human human, StatisticsPanel statPanel,  GameBoardPanel board , HistoryPanel historyPanel, int move){
         boolean moved = false;
@@ -450,31 +438,32 @@ public class GameProcessor {
             }
             else {
                 Piece closestPieceToMove = getPieceClosestToExit(possibleMoves);
-                collisionWithHuman = checkCollision(closestPieceToMove.getPossibleNewColumn(),closestPieceToMove.getPossibleNewRow(),human.getPlayerPieces());
-                if(collisionWithHuman) {
-                    Piece humanPieceToRemove = human.getPieceByCoordinates(closestPieceToMove.getPossibleNewColumn(),closestPieceToMove.getPossibleNewRow());
-                    humanPieceToRemove.setOnBoard(false);
-                    human.piecesStatisticRecalculation();
-                    humanPieceToRemove.resetPosition(human);
-                    statPanel.updateCurrentGameStatistics(human);
-                    board.removePiece(humanPieceToRemove);
-                    board.movePiece(closestPieceToMove,closestPieceToMove.getPossibleNewRow(),closestPieceToMove.getPossibleNewColumn());
-                    closestPieceToMove.setColumnPositionOnBoard(closestPieceToMove.getPossibleNewColumn());
-                    closestPieceToMove.setRowPositionOnBoard(closestPieceToMove.getPossibleNewRow());
-                    historyPanel.addEntry("Computer captured player piece on position( " + closestPieceToMove.getColumnPositionOnBoard() + "," +
-                            closestPieceToMove.getRowPositionOnBoard() + " )");
-                }
-                else {
-                    board.movePiece(closestPieceToMove,closestPieceToMove.getPossibleNewRow(),closestPieceToMove.getPossibleNewColumn());
-                    historyPanel.addEntry("Computer moved piece  from position (" + closestPieceToMove.getColumnPositionOnBoard() + ","
-                    + closestPieceToMove.getRowPositionOnBoard() + " ) to position " + closestPieceToMove.getPossibleNewColumn() + "," +
-                    closestPieceToMove.getPossibleNewRow() + " )");
+                if (closestPieceToMove != null) {
+                    collisionWithHuman = checkCollision(closestPieceToMove.getPossibleNewColumn(), closestPieceToMove.getPossibleNewRow(), human.getPlayerPieces());
+                    if (collisionWithHuman) {
+                        Piece humanPieceToRemove = human.getPieceByCoordinates(closestPieceToMove.getPossibleNewColumn(), closestPieceToMove.getPossibleNewRow());
+                        humanPieceToRemove.setOnBoard(false);
+                        human.piecesStatisticRecalculation();
+                        humanPieceToRemove.resetPosition(human);
+                        statPanel.updateCurrentGameStatistics(human);
+                        board.removePiece(humanPieceToRemove);
+                        board.movePiece(closestPieceToMove, closestPieceToMove.getPossibleNewRow(), closestPieceToMove.getPossibleNewColumn());
+                        closestPieceToMove.setColumnPositionOnBoard(closestPieceToMove.getPossibleNewColumn());
+                        closestPieceToMove.setRowPositionOnBoard(closestPieceToMove.getPossibleNewRow());
+                        historyPanel.addEntry("Computer captured player piece on position( " + closestPieceToMove.getColumnPositionOnBoard() + "," +
+                                closestPieceToMove.getRowPositionOnBoard() + " )");
+                    } else {
+                        board.movePiece(closestPieceToMove, closestPieceToMove.getPossibleNewRow(), closestPieceToMove.getPossibleNewColumn());
+                        historyPanel.addEntry("Computer moved piece  from position (" + closestPieceToMove.getColumnPositionOnBoard() + ","
+                                + closestPieceToMove.getRowPositionOnBoard() + " ) to position " + closestPieceToMove.getPossibleNewColumn() + "," +
+                                closestPieceToMove.getPossibleNewRow() + " )");
 
-                    closestPieceToMove.setRowPositionOnBoard(closestPieceToMove.getPossibleNewRow());
-                    closestPieceToMove.setColumnPositionOnBoard(closestPieceToMove.getPossibleNewColumn());
-                }
-                moved=true;
+                        closestPieceToMove.setRowPositionOnBoard(closestPieceToMove.getPossibleNewRow());
+                        closestPieceToMove.setColumnPositionOnBoard(closestPieceToMove.getPossibleNewColumn());
+                    }
+                    moved = true;
 
+                }
             }
 
         }
