@@ -9,15 +9,6 @@ import java.util.Random;
 
 public class GameProcessor {
 
-    private Alert generateAlert(String title, String header, String content, Alert.AlertType type) {
-        Alert res = new Alert(type);
-        res.setTitle(title);
-        res.setHeaderText(header);
-        res.setContentText(content);
-
-        return res;
-    }
-
     private boolean checkCollision(int column, int row, List<Piece> possibleCollisions) {
         boolean found = false;
 
@@ -199,7 +190,7 @@ public class GameProcessor {
             } else  {
 
                 if (player instanceof Human) {
-                    Alert alert = generateAlert("Rosette Alert", null,
+                    Alert alert = UITools.generateAlert("Rosette Alert", null,
                             "You can not capture oponent piece to position (" + newCol + "," + newRow + ") - rosette field.", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
                 } else {
@@ -333,7 +324,7 @@ public class GameProcessor {
 
         if (isInCollisionWithPlayer) {
             if(player instanceof Human) {
-                alert = generateAlert("Collision Allert", null,
+                alert = UITools.generateAlert("Collision Allert", null,
                         "You can not put piece to position (" + newCol + "," + newRow + ") - collision with another piece.", Alert.AlertType.INFORMATION);
 
                 alert.showAndWait();
@@ -393,7 +384,7 @@ public class GameProcessor {
                 isInCollisionWithPlayer = checkCollision(newCol, newRow, player.getPlayerPieces());
 
                 if (isMovedFromBoard) {
-                    Alert alert = generateAlert("Piece moved", null,
+                    Alert alert = UITools.generateAlert("Piece moved", null,
                             "Gratulations - piece on position (" + newCol + "," + newRow + ") succesfully left the board", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
                     history.addEntry("Player " + player.getNick() + "succesfully moved piece on position ( " +  newCol + "," + newRow + ") out of the board"  );
@@ -405,14 +396,14 @@ public class GameProcessor {
                     board.removePiece(p);
                 }
                 else if (cannotBeMovedTooFar) {
-                    Alert alert = generateAlert("Piece moved too far", null,
+                    Alert alert = UITools.generateAlert("Piece moved too far", null,
                             "Piece on position (" + oldCol + "," + oldRow + ") cannot be moved - too far", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
                 }
                 else {
 
                     if (isInCollisionWithPlayer) {
-                        Alert alert = generateAlert("Collision Alert", null,
+                        Alert alert = UITools.generateAlert("Collision Alert", null,
                                 "You can not put piece to position (" + newCol + "," + newRow + ") -  collision with another piece.", Alert.AlertType.INFORMATION);
 
                         alert.showAndWait();

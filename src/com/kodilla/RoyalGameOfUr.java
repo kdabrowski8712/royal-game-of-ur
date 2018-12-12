@@ -2,7 +2,6 @@ package com.kodilla;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -74,84 +73,7 @@ public class RoyalGameOfUr extends Application {
         computerPlayer.resetPlayer();
     }
 
-    private Alert generateAlert(String title, String header, String content , Alert.AlertType type) {
-        Alert res = new Alert(type);
-        res.setTitle(title);
-        res.setHeaderText(header);
-        res.setContentText(content);
 
-        return res;
-    }
-
-    private Dialog<GameSettings> buildDialogForGameSettings()  {
-        Dialog<GameSettings> result = new Dialog<>();
-        result.setTitle("Game Settings");
-
-        GridPane content = new GridPane();
-        content.setHgap(20);
-        content.setVgap(10);
-        content.setPadding(new Insets(10,10,0,10));
-
-        Label testL = new Label("Nr of cleared pieces to win:");
-        Label humanPieceColor = new Label("Human piece color: ");
-        Label computerPieceColor = new Label("Computer piece color:");
-        TextField input = new TextField();
-        input.setText("7");
-        input.setDisable(true);
-        CheckBox defaultCheckbox = new CheckBox("Default (7)");
-        defaultCheckbox.setSelected(true);
-
-        ColorPicker humanColorPicker = new ColorPicker(Color.YELLOW);
-        ColorPicker computerColorPicker = new ColorPicker(Color.GRAY);
-
-        content.add(testL,0,3);
-        content.add(input,1,3);
-        content.add(defaultCheckbox,2,3);
-        content.add(humanPieceColor,0,4);
-        content.add(humanColorPicker,1,4);
-        content.add(computerPieceColor,0,5);
-        content.add(computerColorPicker,1,5);
-
-        result.getDialogPane().setContent(content);
-
-        ButtonType okButton = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType ocancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        result.getDialogPane().getButtonTypes().add(okButton);
-        result.getDialogPane().getButtonTypes().add(ocancelButton);
-
-        defaultCheckbox.setOnAction(event -> {
-            CheckBox chk = (CheckBox)event.getSource();
-
-            if(chk.isSelected()) {
-                input.setDisable(true);
-                input.setText("7");
-            }
-            if(!chk.isSelected()) {
-                input.setDisable(false);
-            }
-
-        });
-
-        result.setResultConverter((button )-> {
-            GameSettings value;
-            if(button==okButton){
-                try {
-                     int nrOfMovesToWin = Integer.parseInt(input.getText());
-                      value = new GameSettings(nrOfMovesToWin,humanColorPicker.getValue(),computerColorPicker.getValue());
-                }
-                catch (NumberFormatException ex) {
-                    Alert alert = generateAlert("Parsing error",null,"Wrong data in text filed - default(7) will be used", Alert.AlertType.INFORMATION);
-                    alert.showAndWait();
-                    value = new GameSettings(7,humanColorPicker.getValue(),computerColorPicker.getValue());
-                }
-                return value;
-            }  else {
-                return null;
-            }
-        });
-
-        return result;
-    }
 
     private void setEventHandlersForMenuAndButtons() {
 
@@ -174,7 +96,7 @@ public class RoyalGameOfUr extends Application {
         );
 
         gameMenu.getGameSettings().setOnAction(event -> {
-            Dialog<GameSettings> gSettingDialog = buildDialogForGameSettings();
+            Dialog<GameSettings> gSettingDialog = gameSettings.buildDialogForGameSettings();
             Optional<GameSettings> result = gSettingDialog.showAndWait();
         });
 
@@ -186,7 +108,7 @@ public class RoyalGameOfUr extends Application {
             Alert alert = null;
 
             if(humanPlayer.getPiecesReadyToEnterIntoBoard()>0 && humanPlayer.getPiecesReadyToEnterIntoBoard()<7) {
-                alert = generateAlert("Add new piece Question","Do you want to add new piece ?",
+                alert = UITools.generateAlert("Add new piece Question","Do you want to add new piece ?",
                         "Chose OK to add , Cancel to move piece", Alert.AlertType.CONFIRMATION);
 
                 Optional<ButtonType> result = alert.showAndWait();
@@ -224,12 +146,12 @@ public class RoyalGameOfUr extends Application {
 
             if(moveExisting) {
                 if(diceRoll==0) {
-                    alert = generateAlert("No moves possible", null,
+                    alert = UITools.generateAlert("No moves possible", null,
                             "0 in dice roll. No move possible", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
                 }
                 else {
-                    alert = generateAlert("Choosing piece to move", null,
+                    alert = UITools.generateAlert("Choosing piece to move", null,
                             "Click on piece that should be moved", Alert.AlertType.INFORMATION);
 
                     alert.showAndWait();
