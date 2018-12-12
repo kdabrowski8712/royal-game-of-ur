@@ -81,4 +81,8 @@ public class Piece {
     public void setPossibleNewColumn(int getPossibleNewColumn) {
         this.getPossibleNewColumn = getPossibleNewColumn;
     }
+
+    public void setPieceColor(Color pieceColor) {
+        this.pieceColor = pieceColor;
+    }
 }

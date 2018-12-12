@@ -117,13 +117,19 @@ public abstract class GenericPlayer {
         return nrOfPiecesMoved;
     }
 
-    public boolean checkWinCondition() {
+    public boolean checkWinCondition(GameSettings settings) {
         boolean win = false;
 
-        if(this.getNrOfPiecesMoved()==7) {
+        if(this.getNrOfPiecesMoved()==settings.getNrOfPiecesToWin()) {
             win = true;
         }
 
         return  win;
+    }
+
+    public void setPiecesColor(Color newColor) {
+        for(Piece p : playerPieces) {
+            p.setPieceColor(newColor);
+        }
     }
 }

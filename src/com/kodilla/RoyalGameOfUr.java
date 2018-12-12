@@ -79,6 +79,7 @@ public class RoyalGameOfUr extends Application {
 
         gameMenu.getNewGameMenuItem().setOnAction(event -> {
                     newGameCleaning();
+                    gameMenu.getGameSettings().setDisable(true);
                     gameBoardPanel.getNewMoveButton().setDisable(false);
 
                      TextInputDialog dialog = new TextInputDialog("Unknown");
@@ -98,6 +99,14 @@ public class RoyalGameOfUr extends Application {
         gameMenu.getGameSettings().setOnAction(event -> {
             Dialog<GameSettings> gSettingDialog = gameSettings.buildDialogForGameSettings();
             Optional<GameSettings> result = gSettingDialog.showAndWait();
+
+            if(result.isPresent()) {
+                GameSettings tempSettings = result.get();
+                gameSettings.setComputerColor(tempSettings.getComputerColor());
+                gameSettings.setHumanColor(tempSettings.getHumanColor());
+                gameSettings.setNrOfPiecesToWin(tempSettings.getNrOfPiecesToWin());
+            }
+
         });
 
         gameBoardPanel.getNewMoveButton().setOnAction( event -> {
@@ -185,11 +194,11 @@ public class RoyalGameOfUr extends Application {
                     processor.insertNewPiece(computerPlayer,humanPlayer,gameBoardPanel,historyPanel,statisticsPanel,diceRoll);
                 }
 
-                if(computerPlayer.checkWinCondition()) {
+                if(computerPlayer.checkWinCondition(gameSettings)) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 }
-                else if(humanPlayer.checkWinCondition()) {
+                else if(humanPlayer.checkWinCondition(gameSettings)) {
                     historyPanel.addEntry("Computer win this game !!");
                     gameBoardPanel.getNewMoveButton().setDisable(true);
                 } else {
