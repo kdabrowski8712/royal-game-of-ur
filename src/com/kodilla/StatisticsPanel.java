@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 public class StatisticsPanel {
 
-    private VBox panel;
+    private GridPane panel;
 
     private Label nrOfGamesValue;
     private Label nrOfGamesTitle;
@@ -32,14 +32,8 @@ public class StatisticsPanel {
     private Label diceRollHuman;
     private Label diceRollComputerTitle;
     private Label diceRollComputer;
-    private HBox titleBox;
-    private HBox hPiecesClearedBox;
-    private HBox hPiecesLeftBox;
-    private HBox nrOfGamesBox;
-    private HBox cPiecesClearedBox;
-    private HBox cPiecesLeftBox;
-    private HBox diceRollHumanBox;
-    private HBox diceRollComputerBox;
+    private Label nrOfMovesToWinGameTitle;
+    private Label nrOfMovesToWinGame;
 
 
     private String cssLayout = "-fx-border-color: black;\n" +
@@ -54,14 +48,6 @@ public class StatisticsPanel {
         humanPiecesLeft = new Label("7");
         computerPiecesLeft = new Label("7");
         computerPiecesCleared = new Label("0");
-
-        titleBox = new HBox();
-        titleBox.setAlignment(Pos.CENTER);
-
-        this.hPiecesClearedBox = new HBox();
-        this.hPiecesLeftBox = new HBox();
-        this.hPiecesLeftBox.setSpacing(30);
-
 
         diceRollComputerTitle = new Label("Dice roll in current move - computer: ");
         diceRollhumanTitle = new Label("Dice roll in current move - human: ");
@@ -92,6 +78,9 @@ public class StatisticsPanel {
         this.cPiecesCLearedTitle = new Label("Pieces cleared : ");
         this.cPiecesLeftTitle = new Label("Pieces left : ");
 
+        nrOfMovesToWinGameTitle = new Label("Nr of pieces to move to win: ");
+        nrOfMovesToWinGame = new Label("7");
+
 
     }
 
@@ -112,23 +101,28 @@ public class StatisticsPanel {
         result.add(overallLabel,0,1);
         result.add(nrOfGamesTitle,0,2);
         result.add(nrOfGamesValue,1,2);
-        result.add(playerLabel,0,3);
-        result.add(hPiecesCLearedTitle,0,4);
-        result.add(humaanPiecesCleared,1,4);
-        result.add(hPiecesLeftTitle,0,5);
-        result.add(humanPiecesLeft,1,5);
-        result.add(diceRollhumanTitle,0,6);
-        result.add(diceRollHuman,1,6);
 
-        result.add(computerLabel,0,7);
-        result.add(cPiecesCLearedTitle,0,8);
-        result.add(computerPiecesCleared,1,8);
-        result.add(cPiecesLeftTitle,0,9);
-        result.add(computerPiecesLeft,1,9);
+        result.add(nrOfMovesToWinGameTitle,0,3);
+        result.add(nrOfMovesToWinGame,1,3);
 
-        result.add(diceRollComputerTitle,0,10);
-        result.add(diceRollComputer,1,10);
+        result.add(playerLabel,0,4);
+        result.add(hPiecesCLearedTitle,0,5);
+        result.add(humaanPiecesCleared,1,5);
+        result.add(hPiecesLeftTitle,0,6);
+        result.add(humanPiecesLeft,1,6);
+        result.add(diceRollhumanTitle,0,7);
+        result.add(diceRollHuman,1,7);
 
+        result.add(computerLabel,0,8);
+        result.add(cPiecesCLearedTitle,0,9);
+        result.add(computerPiecesCleared,1,9);
+        result.add(cPiecesLeftTitle,0,10);
+        result.add(computerPiecesLeft,1,10);
+
+        result.add(diceRollComputerTitle,0,11);
+        result.add(diceRollComputer,1,11);
+
+        panel = result;
         return result;
     }
 
@@ -170,6 +164,11 @@ public class StatisticsPanel {
             this.computerPiecesCleared.setText(String.valueOf(player.getNrOfPiecesMoved()));
             this.computerPiecesLeft.setText(String.valueOf(player.getNrOfPiecesLeft()));
         }
+    }
+
+    public void updateNrOfMovesToWin(int val) {
+
+        nrOfMovesToWinGame.setText(String.valueOf(val));
     }
 
 }

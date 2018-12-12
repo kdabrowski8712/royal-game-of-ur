@@ -93,6 +93,8 @@ public class RoyalGameOfUr extends Application {
                         statisticsPanel.updatePlayerNick(result.get());
                     });
 
+                    statisticsPanel.updateNrOfMovesToWin(gameSettings.getNrOfPiecesToWin());
+
                 }
         );
 
