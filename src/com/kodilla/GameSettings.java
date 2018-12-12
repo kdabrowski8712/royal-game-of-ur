@@ -6,15 +6,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 public class GameSettings {
-    public GameSettings(int nrOfPiecesToWin, Color humanColor, Color computerColor) {
+    public GameSettings(int nrOfPiecesToWin, Color humanColor, Color computerColor, int time) {
         this.nrOfPiecesToWin = nrOfPiecesToWin;
         this.humanColor = humanColor;
         this.computerColor = computerColor;
+        this.timeOfPlaying = time;
+
     }
 
     private int nrOfPiecesToWin;
     private Color humanColor;
     private Color computerColor;
+    private int timeOfPlaying;
 
     public int getNrOfPiecesToWin() {
         return nrOfPiecesToWin;
@@ -94,12 +97,12 @@ public class GameSettings {
             if(button==okButton){
                 try {
                     int nrOfMovesToWin = Integer.parseInt(input.getText());
-                    value = new GameSettings(nrOfMovesToWin,humanColorPicker.getValue(),computerColorPicker.getValue());
+                    value = new GameSettings(nrOfMovesToWin,humanColorPicker.getValue(),computerColorPicker.getValue(),60);
                 }
                 catch (NumberFormatException ex) {
                     Alert alert = UITools.generateAlert("Parsing error",null,"Wrong data in text filed - default(7) will be used", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
-                    value = new GameSettings(7,humanColorPicker.getValue(),computerColorPicker.getValue());
+                    value = new GameSettings(7,humanColorPicker.getValue(),computerColorPicker.getValue(),60);
                 }
                 return value;
             }  else {
@@ -109,4 +112,6 @@ public class GameSettings {
 
         return result;
     }
+
+
 }

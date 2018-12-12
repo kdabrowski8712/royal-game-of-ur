@@ -34,7 +34,7 @@ public class RoyalGameOfUr extends Application {
         this.historyPanel = new HistoryPanel();
         this.gameMenu = new GameMenu();
         processor = new GameProcessor();
-        gameSettings = new GameSettings(7,Color.YELLOW,Color.GRAY);
+        gameSettings = new GameSettings(7,Color.YELLOW,Color.GRAY,60);
         this.computerPlayer = new Computer(gameSettings.getComputerColor());
         this.humanPlayer = new Human("Unknown",gameSettings.getHumanColor());
 
@@ -107,6 +107,14 @@ public class RoyalGameOfUr extends Application {
                 gameSettings.setComputerColor(tempSettings.getComputerColor());
                 gameSettings.setHumanColor(tempSettings.getHumanColor());
                 gameSettings.setNrOfPiecesToWin(tempSettings.getNrOfPiecesToWin());
+
+                System.out.println(gameSettings.getHumanColor());
+
+
+                humanPlayer.setPiecesColor(gameSettings.getHumanColor());
+                computerPlayer.setPiecesColor(gameSettings.getComputerColor());
+
+                System.out.println(humanPlayer.getPlayerPieces().get(0).getPieceColor());
             }
 
         });

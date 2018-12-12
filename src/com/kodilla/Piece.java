@@ -84,5 +84,10 @@ public class Piece {
 
     public void setPieceColor(Color pieceColor) {
         this.pieceColor = pieceColor;
+        pieceRepresentation.setFill(pieceColor);
+    }
+
+    public Color getPieceColor() {
+        return pieceColor;
     }
 }
