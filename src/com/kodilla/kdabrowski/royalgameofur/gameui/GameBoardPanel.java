@@ -1,4 +1,8 @@
-package com.kodilla;
+package com.kodilla.kdabrowski.royalgameofur.gameui;
+
+import com.kodilla.kdabrowski.royalgameofur.settings.BoardConfiguration;
+import com.kodilla.kdabrowski.royalgameofur.state.BoardCoordinates;
+import com.kodilla.kdabrowski.royalgameofur.state.Piece;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -18,6 +22,7 @@ import java.util.List;
 public class GameBoardPanel {
     private List<Rectangle> boardFields;
     private List<ImageView> rosettas;
+    private BoardConfiguration boardConfiguration;
     private GridPane panel;
     private Label column0Label;
     private Label column1Label;
@@ -31,9 +36,9 @@ public class GameBoardPanel {
     private Label row6Label;
     private Label row7Label;
     private Button newMoveButton;
-    private Label diceRollLabel;
 
-    public GameBoardPanel() {
+
+    public GameBoardPanel(BoardConfiguration boardConfiguration) {
         boardFields = new ArrayList<>();
         rosettas = new ArrayList<>();
 
@@ -53,7 +58,8 @@ public class GameBoardPanel {
 
         newMoveButton = new Button("New move");
         newMoveButton.setDisable(true);
-        diceRollLabel = new Label("Dice roll in this move : 0");
+        this.boardConfiguration = boardConfiguration;
+
 
         column0Label.setStyle(style);
         column1Label.setStyle(style);
@@ -89,7 +95,7 @@ public class GameBoardPanel {
         for(int j=0; j<8;j++){
             for(int i=0; i<3;i++) {
                 Rectangle newRec=null;
-                if(i==1) {
+                if(boardConfiguration.checkIfOnBattleField(i)) {
                     newRec = generateBoardRectangle(Color.RED,100,100);
                 }
                 else if(j<2 || j>3) {
@@ -109,11 +115,10 @@ public class GameBoardPanel {
             rosettas.add(ros);
         }
 
-       gamePane.add(rosettas.get(0),0,1);
-        gamePane.add(rosettas.get(1),2,1);
-        gamePane.add(rosettas.get(2),0,7);
-        gamePane.add(rosettas.get(3),2,7);
-        gamePane.add(rosettas.get(4),1,4);
+        for(int i=0; i<5; i++) {
+            BoardCoordinates rosetePosition = boardConfiguration.getFieldsWithRosette().get(i).getRosettePosition();
+            gamePane.add(rosettas.get(i),rosetePosition.getColumn(),rosetePosition.getRow());
+        }
 
         gamePane.add(column0Label,0,8);
         GridPane.setHalignment(column0Label,HPos.CENTER);
@@ -153,8 +158,6 @@ public class GameBoardPanel {
         GridPane.setHalignment(newMoveButton,HPos.CENTER);
         GridPane.setMargin(newMoveButton, new Insets(10,0,0,0));
 
-        //gamePane.add(diceRollLabel,4,9);
-
         return gamePane;
     }
 
@@ -173,29 +176,26 @@ public class GameBoardPanel {
         r.setStrokeWidth(2);
         r.setStroke(Color.WHITE);
 
-
         return r;
 
     }
 
-    public void addPiece( Piece p , int row , int column) {
-        this.panel.add(p.getPieceRepresentation(),column,row);
+    public void addPiece( Piece p ) {
+        this.panel.add(p.getPieceRepresentation(),p.getPiecePositionOnBoard().getColumn(),p.getPiecePositionOnBoard().getRow());
         GridPane.setHalignment(p.getPieceRepresentation(), HPos.CENTER);
     }
 
-    public void movePiece(Piece p , int newRow, int newColumn) {
+    public void movePiece(Piece p, BoardCoordinates newCoordinates) {
 
         removePiece(p);
-        addPiece(p,newRow,newColumn);
+        addPiece(p);
     }
+
 
     public void  removePiece(Piece p) {
         this.panel.getChildren().remove(p.getPieceRepresentation());
     }
 
-    public GridPane getPanel() {
-        return panel;
-    }
 
     public void clear() {
 

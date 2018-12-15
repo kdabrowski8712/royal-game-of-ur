@@ -1,36 +1,57 @@
-package com.kodilla;
+package com.kodilla.kdabrowski.royalgameofur.state;
 
+import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class GenericPlayer {
+public class Player {
     private String nick;
     private List<Piece> playerPieces;
     private int nrOfPiecesLeft;
     private int nrOfPiecesMoved;
+    private int totalNumberOfPlayerPieces;
 
-    public GenericPlayer(String nick , Color pieceColor) {
+    public boolean isHuman() {
+        boolean result = false;
+        if(!nick.contains("Computer")) {
+            result = true;
+        }
+        return result;
+    }
+
+    public Player(String nick , Color pieceColor) {
         this.nick = nick;
 
         playerPieces = new ArrayList<>();
+        totalNumberOfPlayerPieces = 7;
 
-        for(int i=0; i<7;i++) {
+        for(int i = 0; i< totalNumberOfPlayerPieces; i++) {
             playerPieces.add(new Piece(pieceColor));
         }
         nrOfPiecesLeft =7;
         nrOfPiecesMoved = 0;
+
+        populatePiecesStartingPositions();
+
+    }
+
+    private void populatePiecesStartingPositions() {
+        for(Piece processedPiece : playerPieces )
+        {
+            processedPiece.resetPiecePosition(nick);
+        }
     }
 
     public void resetPlayer() {
         nrOfPiecesMoved = 0;
-        nrOfPiecesLeft = 7;
+        nrOfPiecesLeft = totalNumberOfPlayerPieces;
 
         for(Piece p : playerPieces) {
-            p.setOnBoard(false);
-            p.setMovedThroughBoard(false);
+            p.resetPieceState();
+            p.resetPiecePosition(nick);
         }
     }
 
@@ -42,7 +63,7 @@ public abstract class GenericPlayer {
                 nrOfPiecesMoved+=1;
             }
         }
-        nrOfPiecesLeft = 7 - nrOfPiecesMoved;
+        nrOfPiecesLeft = totalNumberOfPlayerPieces - nrOfPiecesMoved;
     }
 
     public int getPiecesReadyToEnterIntoBoard() {
@@ -58,7 +79,7 @@ public abstract class GenericPlayer {
         return  result;
     }
 
-    public Piece getPieceByCoordinates(int x , int y) {
+    public Piece getPieceByBoardPosition(BoardCoordinates boardPosition) {
         Piece result = null;
         boolean found = false;
 
@@ -67,8 +88,9 @@ public abstract class GenericPlayer {
         while (!found && pieceIterator.hasNext()) {
 
             Piece piece = pieceIterator.next();
+
             if(piece.isOnBoard()) {
-                if(piece.getColumnPositionOnBoard()== x && piece.getRowPositionOnBoard()==y){
+                if(piece.getPiecePositionOnBoard().getColumn()== boardPosition.getColumn() && piece.getPiecePositionOnBoard().getRow()==boardPosition.getRow()){
                     result = piece;
                     found=true;
                 }
@@ -132,4 +154,34 @@ public abstract class GenericPlayer {
             p.setPieceColor(newColor);
         }
     }
+
+    public  boolean checkCollisionWithPlayerPieces(BoardCoordinates coordinatesToCheck) {
+        boolean found = false;
+
+        Iterator<Piece> pieceIterator = playerPieces.iterator();
+
+        while (!found && pieceIterator.hasNext()) {
+
+            Piece p = pieceIterator.next();
+
+            if (p.isOnBoard()) {
+                if (p.getPiecePositionOnBoard().getColumn() == coordinatesToCheck.getColumn() && p.getPiecePositionOnBoard().getRow() == coordinatesToCheck.getRow()) {
+                    found = true;
+                }
+            }
+
+        }
+        return found;
+    }
+
+    public boolean checkIfPlayerHaveAllPiecesOutOfBoard(){
+        boolean result = false;
+
+        if(getPiecesReadyToEnterIntoBoard()==7) {
+            result=true;
+        }
+
+        return result;
+    }
+
 }

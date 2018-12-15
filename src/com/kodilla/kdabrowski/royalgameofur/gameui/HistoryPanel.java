@@ -1,4 +1,4 @@
-package com.kodilla;
+package com.kodilla.kdabrowski.royalgameofur.gameui;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

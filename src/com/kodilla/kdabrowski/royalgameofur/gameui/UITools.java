@@ -1,4 +1,4 @@
-package com.kodilla;
+package com.kodilla.kdabrowski.royalgameofur.gameui;
 
 import javafx.scene.control.Alert;
 

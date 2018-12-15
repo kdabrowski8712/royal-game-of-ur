@@ -1,13 +1,10 @@
-package com.kodilla;
+package com.kodilla.kdabrowski.royalgameofur.gameui;
 
+import com.kodilla.kdabrowski.royalgameofur.state.Player;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class StatisticsPanel {
@@ -153,10 +150,10 @@ public class StatisticsPanel {
         nrOfGamesValue.setText(String.valueOf(tempVal));
     }
 
-    public void updateCurrentGameStatistics(GenericPlayer player) {
+    public void updateCurrentGameStatistics(Player player) {
 
 
-        if(player instanceof Human) {
+        if(!player.getNick().contains("Computer")) {
             this.humaanPiecesCleared.setText(String.valueOf(player.getNrOfPiecesMoved()));
             this.humanPiecesLeft.setText(String.valueOf(player.getNrOfPiecesLeft()));
         }
