@@ -10,12 +10,14 @@ public class GameSettings {
     private Color humanColor;
     private Color computerColor;
     private int timeOfPlaying;
+    private boolean settingsLoadedFromFile;
 
     public GameSettings(int nrOfPiecesToWin, Color humanColor, Color computerColor, int time) {
         this.nrOfPiecesToWin = nrOfPiecesToWin;
         this.humanColor = humanColor;
         this.computerColor = computerColor;
         this.timeOfPlaying = time;
+        settingsLoadedFromFile = false;
 
     }
 
@@ -41,11 +43,28 @@ public class GameSettings {
 
     public Dialog<GameSettings> buildDialogForGameSettings() {
 
-        GameSettingsDialog dialog = new GameSettingsDialog();
+        GameSettingsDialog dialog = new GameSettingsDialog(this);
         return dialog.returnDialog();
     }
 
     public int getTimeOfPlaying() {
         return timeOfPlaying;
+    }
+
+    public boolean isSettingsLoadedFromFile() {
+        return settingsLoadedFromFile;
+    }
+
+    public void setSettingsLoadedFromFile(boolean settingsLoadedFromFile) {
+        this.settingsLoadedFromFile = settingsLoadedFromFile;
+    }
+
+    @Override
+    public String toString() {
+        return  nrOfPiecesToWin +
+                "," + humanColor +
+                "," + computerColor +
+                "," + timeOfPlaying +
+                '\n';
     }
 }

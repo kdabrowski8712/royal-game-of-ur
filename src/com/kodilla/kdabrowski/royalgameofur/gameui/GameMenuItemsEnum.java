@@ -8,7 +8,7 @@ import java.util.List;
 public class GameMenuItemsEnum {
 
     public enum MenuItemText {
-        NewGame,EditSettings,SaveState;
+        NewGame,EditSettings,SaveState,SaveSettings;
 
     }
 

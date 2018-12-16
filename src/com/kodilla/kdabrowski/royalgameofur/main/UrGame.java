@@ -3,6 +3,7 @@ package com.kodilla.kdabrowski.royalgameofur.main;
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameMenuItemsEnum;
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameUI;
 import com.kodilla.kdabrowski.royalgameofur.gameui.UITools;
+import com.kodilla.kdabrowski.royalgameofur.iooperations.GameObjectsWriter;
 import com.kodilla.kdabrowski.royalgameofur.settings.BoardConfiguration;
 import com.kodilla.kdabrowski.royalgameofur.settings.Rosette;
 import com.kodilla.kdabrowski.royalgameofur.state.GameMove;
@@ -48,6 +49,7 @@ public class UrGame {
         gameUserInterface.setMenuItemEventHandler(createHandlerForNewGameMenuItem(gameState), GameMenuItemsEnum.MenuItemText.NewGame);
         gameUserInterface.setMenuItemEventHandler(createHandlerForGameSettingsMenuItem(),GameMenuItemsEnum.MenuItemText.EditSettings);
         gameUserInterface.setMenuItemEventHandler(createEventForSaveState(),GameMenuItemsEnum.MenuItemText.SaveState);
+        gameUserInterface.setMenuItemEventHandler(createEventForSaveSettings(),GameMenuItemsEnum.MenuItemText.SaveSettings);
 
         // gameUserInterface.setEventHandlerForNewGameMenuItem(createHandlerForNewGameMenuItem(gameState));
         //gameUserInterface.setEventHandlerForGameSettingsMenuItem(createHandlerForGameSettingsMenuItem());
@@ -237,34 +239,24 @@ public class UrGame {
             File f = test.showSaveDialog(this.promaryStage);
 
 
-            System.out.println(f.toPath());
+            //System.out.println(f.toPath());
 
             try {
 
-                FileOutputStream fs = new FileOutputStream(f);
-                ObjectOutputStream stream = new ObjectOutputStream(fs);
+//                FileOutputStream fs = new FileOutputStream(f);
+//                ObjectOutputStream stream = new ObjectOutputStream(fs);
+//
+//                stream.writeObject(boardConfiguration.getFieldsWithRosette().get(0));
+//                stream.close();
+//
+//                FileInputStream ifs = new FileInputStream(f);
+//                ObjectInputStream istream = new ObjectInputStream(ifs);
+//
+//                Rosette r = (Rosette) istream.readObject();
+//                System.out.println(r.getRosettePosition().getColumn());
+//                System.out.println(r.getRosettePosition().getRow());
+//                istream.close();
 
-                stream.writeObject(boardConfiguration.getFieldsWithRosette().get(0));
-                stream.close();
-
-                FileInputStream ifs = new FileInputStream(f);
-                ObjectInputStream istream = new ObjectInputStream(ifs);
-
-                Rosette r = (Rosette) istream.readObject();
-                System.out.println(r.getRosettePosition().getColumn());
-                System.out.println(r.getRosettePosition().getRow());
-                istream.close();
-
-
-
-
-                //Path fileP = f.toPath();
-                //FileWriter writer = new FileWriter(f);
-                ////BufferedWriter bWriter = new BufferedWriter(writer);
-
-                //writer.write("simple check line\n");
-                //writer.write("secind line");
-                //writer.close();
 
             }catch (Exception e) {
                 System.out.println(e);
@@ -274,6 +266,42 @@ public class UrGame {
 
         return result;
     }
+
+    private EventHandler<ActionEvent> createEventForSaveSettings() {
+        EventHandler<ActionEvent> result = (event -> {
+
+            FileChooser saveSettingsFile = new FileChooser();
+            saveSettingsFile.setTitle("Save to file");
+            saveSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)",".txt"));
+
+            File f = saveSettingsFile.showSaveDialog(this.promaryStage);
+
+            if(f!=null) {
+
+                try{
+
+                   GameObjectsWriter.saveGameSettings(gameSettings,f);
+
+                }catch(IOException exc) {
+                    Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings not saved", Alert.AlertType.INFORMATION);
+                    alert.showAndWait();
+                }
+            }
+            else {
+              Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be modified", Alert.AlertType.INFORMATION);
+              alert.showAndWait();
+            }
+
+
+
+        });
+
+
+
+
+        return result;
+    }
+
 
     private void performComputerMove(BoardConfiguration boardConfiguration , GameState gameState) {
 

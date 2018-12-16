@@ -25,7 +25,7 @@ public class GameSettingsDialog {
     private GridPane dailogPanel;
     private Dialog<GameSettings> dialogObject;
 
-    public GameSettingsDialog() {
+    public GameSettingsDialog(GameSettings settings) {
 
         dailogPanel = new GridPane();
         nrOfPiecesToWinLabel = new Label("Nr of cleared pieces to win:");
@@ -35,17 +35,28 @@ public class GameSettingsDialog {
         inputNrOfPieces = new TextField();
         timeInput = new TextField();
 
-        inputNrOfPieces.setText("7");
-        timeInput.setText("5");
+        if(!settings.isSettingsLoadedFromFile()) {
+            inputNrOfPieces.setText("7");
+            timeInput.setText("5");
+        }
+        else {
+            inputNrOfPieces.setText(String.valueOf(settings.getNrOfPiecesToWin()));
+            timeInput.setText(String.valueOf(settings.getTimeOfPlaying()));
+        }
 
-        inputNrOfPieces.setDisable(true);
-        timeInput.setDisable(true);
+        if(!settings.isSettingsLoadedFromFile()) {
+            inputNrOfPieces.setDisable(true);
+            timeInput.setDisable(true);
+        }
+
 
         defaultCheckbox = new CheckBox("Default (7)");
         defaultTimeCheckBox = new CheckBox("Default (5)");
 
-        defaultCheckbox.setSelected(true);
-        defaultTimeCheckBox.setSelected(true);
+        if(!settings.isSettingsLoadedFromFile()) {
+            defaultCheckbox.setSelected(true);
+            defaultTimeCheckBox.setSelected(true);
+        }
 
         humanColorPicker = new ColorPicker(Color.YELLOW);
         computerColorPicker = new ColorPicker(Color.GRAY);

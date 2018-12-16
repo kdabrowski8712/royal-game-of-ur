@@ -11,9 +11,11 @@ public class GameMenu {
     private MenuBar gameMenuBar;
     private Menu gameMenu;
     private Menu gameStateMenu;
+    private Menu settingsMenu;
     private MenuItem newGame;
     private MenuItem gameSettings;
     private MenuItem saveGameState;
+    private MenuItem saveSettings;
 
 
     private VBox manuBox;
@@ -22,10 +24,12 @@ public class GameMenu {
         gameMenuBar = new MenuBar();
         gameMenu = new Menu("Game");
         gameStateMenu = new Menu("Game State");
+        settingsMenu = new Menu("Settings");
 
         newGame = new MenuItem("New game");
-        gameSettings = new MenuItem("Game Settings");
+        gameSettings = new MenuItem("Edit Game Settings");
         saveGameState = new MenuItem("Save");
+        saveSettings = new MenuItem("Save Game Settings");
 
     }
 
@@ -33,12 +37,18 @@ public class GameMenu {
         VBox result = new VBox();
         this.manuBox = result;
 
-        gameMenu.getItems().add(gameSettings);
+       // gameMenu.getItems().add(gameSettings);
         gameMenu.getItems().add(newGame);
+        //gameMenu.getItems().add(settingsMenu);
+
         gameStateMenu.getItems().add(saveGameState);
+
+        settingsMenu.getItems().add(gameSettings);
+        settingsMenu.getItems().add(saveSettings);
 
         gameMenuBar.getMenus().add(gameMenu);
         gameMenuBar.getMenus().add(gameStateMenu);
+        gameMenuBar.getMenus().add(settingsMenu);
 
         result.getChildren().add(gameMenuBar);
 
@@ -64,6 +74,9 @@ public class GameMenu {
         }
         else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveState)) {
             this.saveGameState.setOnAction(eventToSet);
+        }
+        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveSettings)) {
+            this.saveSettings.setOnAction(eventToSet);
         }
     }
 }
