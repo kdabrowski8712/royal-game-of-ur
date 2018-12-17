@@ -3,6 +3,7 @@ package com.kodilla.kdabrowski.royalgameofur.gameui;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -34,6 +35,10 @@ public class GameSettingsDialog {
         timeOfPlaying = new Label("Time of playing(minutes): ");
         inputNrOfPieces = new TextField();
         timeInput = new TextField();
+
+       dailogPanel.setVgap(10);
+       dailogPanel.setPadding(new Insets(0,10,0,10));
+       dailogPanel.setHgap(10);
 
         if(!settings.isSettingsLoadedFromFile()) {
             inputNrOfPieces.setText("7");
@@ -78,6 +83,8 @@ public class GameSettingsDialog {
         cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         dialogObject = new Dialog<>();
+
+        dialogObject.setTitle("Edit Game Settings");
 
         dialogObject.getDialogPane().setContent(this.dailogPanel);
         dialogObject.getDialogPane().getButtonTypes().add(okButton);

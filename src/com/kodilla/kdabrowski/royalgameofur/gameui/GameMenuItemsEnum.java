@@ -1,17 +1,9 @@
 package com.kodilla.kdabrowski.royalgameofur.gameui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
-public class GameMenuItemsEnum {
-
-    public enum MenuItemText {
-        NewGame,EditSettings,SaveState,SaveSettings;
-
+public enum GameMenuItemsEnum {
+        NewGame,EditSettings,SaveState,SaveSettings,LoadSettings;
     }
 
 
-}
+
 

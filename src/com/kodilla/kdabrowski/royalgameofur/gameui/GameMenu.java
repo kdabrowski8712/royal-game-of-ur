@@ -16,6 +16,7 @@ public class GameMenu {
     private MenuItem gameSettings;
     private MenuItem saveGameState;
     private MenuItem saveSettings;
+    private  MenuItem loadGameSettings;
 
 
     private VBox manuBox;
@@ -30,6 +31,7 @@ public class GameMenu {
         gameSettings = new MenuItem("Edit Game Settings");
         saveGameState = new MenuItem("Save");
         saveSettings = new MenuItem("Save Game Settings");
+        loadGameSettings = new MenuItem("Load Game Settings");
 
     }
 
@@ -37,14 +39,12 @@ public class GameMenu {
         VBox result = new VBox();
         this.manuBox = result;
 
-       // gameMenu.getItems().add(gameSettings);
         gameMenu.getItems().add(newGame);
-        //gameMenu.getItems().add(settingsMenu);
-
         gameStateMenu.getItems().add(saveGameState);
 
         settingsMenu.getItems().add(gameSettings);
         settingsMenu.getItems().add(saveSettings);
+        settingsMenu.getItems().add(loadGameSettings);
 
         gameMenuBar.getMenus().add(gameMenu);
         gameMenuBar.getMenus().add(gameStateMenu);
@@ -64,19 +64,48 @@ public class GameMenu {
         return gameSettings;
     }
 
-    public void setEventHandlerForMenuItem(EventHandler<ActionEvent> eventToSet , GameMenuItemsEnum.MenuItemText menuIem) {
+    public MenuItem getLoadGameSettings() {
+        return loadGameSettings;
+    }
 
-        if(menuIem.equals(GameMenuItemsEnum.MenuItemText.NewGame)) {
-            this.newGame.setOnAction(eventToSet);
+    public void setEventHandlerForMenuItem(EventHandler<ActionEvent> eventToSet , GameMenuItemsEnum menuIem) {
+
+
+        switch(menuIem) {
+            case NewGame: {
+                this.newGame.setOnAction(eventToSet);
+                break;
+            }
+            case EditSettings: {
+                this.gameSettings.setOnAction(eventToSet);
+                break;
+            }
+            case SaveState: {
+                this.saveGameState.setOnAction(eventToSet);
+                break;
+            }
+            case SaveSettings: {
+                this.saveSettings.setOnAction(eventToSet);
+                break;
+            }
+            case LoadSettings: {
+                this.loadGameSettings.setOnAction(eventToSet);
+            }
+
         }
-        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.EditSettings)) {
-            this.gameSettings.setOnAction(eventToSet);
-        }
-        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveState)) {
-            this.saveGameState.setOnAction(eventToSet);
-        }
-        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveSettings)) {
-            this.saveSettings.setOnAction(eventToSet);
-        }
+
+//        if(menuIem.equals(GameMenuItemsEnum.MenuItemText.NewGame)) {
+//            this.newGame.setOnAction(eventToSet);
+//        }
+//        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.EditSettings)) {
+//            this.gameSettings.setOnAction(eventToSet);
+//        }
+//        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveState)) {
+//            this.saveGameState.setOnAction(eventToSet);
+//        }
+//        else if(menuIem.equals(GameMenuItemsEnum.MenuItemText.SaveSettings)) {
+//            this.saveSettings.setOnAction(eventToSet);
+//        }
+//        else if(menuIem.equals())
     }
 }

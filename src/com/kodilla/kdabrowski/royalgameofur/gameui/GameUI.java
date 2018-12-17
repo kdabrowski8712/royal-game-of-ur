@@ -354,7 +354,7 @@ public class GameUI {
 //
 //    }
 
-    public void setMenuItemEventHandler(EventHandler<ActionEvent> eventToSet , GameMenuItemsEnum.MenuItemText chosenItem) {
+    public void setMenuItemEventHandler(EventHandler<ActionEvent> eventToSet , GameMenuItemsEnum chosenItem) {
         gameMenu.setEventHandlerForMenuItem(eventToSet,chosenItem);
     }
 
@@ -371,6 +371,14 @@ public class GameUI {
 
     public void enableEditSettingsMenuItem() {
         gameMenu.getGameSettings().setDisable(false);
+    }
+
+    public void disableLoadSettingsMenuItem() {
+        gameMenu.getLoadGameSettings().setDisable(true);
+    }
+
+    public void enableLoadSettingsMenuItem() {
+        gameMenu.getLoadGameSettings().setDisable(false);
     }
 
 

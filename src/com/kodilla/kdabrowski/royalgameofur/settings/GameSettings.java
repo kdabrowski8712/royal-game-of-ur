@@ -26,6 +26,7 @@ public class GameSettings {
         computerColor = anotherGameSettingsObject.computerColor;
         nrOfPiecesToWin = anotherGameSettingsObject.getNrOfPiecesToWin();
         timeOfPlaying = anotherGameSettingsObject.getTimeOfPlaying();
+        this.settingsLoadedFromFile = anotherGameSettingsObject.isSettingsLoadedFromFile();
     }
 
     public int getNrOfPiecesToWin() {
@@ -58,6 +59,9 @@ public class GameSettings {
     public void setSettingsLoadedFromFile(boolean settingsLoadedFromFile) {
         this.settingsLoadedFromFile = settingsLoadedFromFile;
     }
+
+
+
 
     @Override
     public String toString() {
