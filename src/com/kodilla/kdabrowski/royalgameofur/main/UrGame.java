@@ -39,15 +39,15 @@ public class UrGame {
 
     public  UrGame(Stage primaryStage) {
         boardConfiguration = new BoardConfiguration();
-        gameSettings = new GameSettings(7, Color.YELLOW,Color.GRAY,5);
+        gameSettings = new GameSettings(7, Color.YELLOW.toString(),Color.GRAY.toString(),5);
         gameState = new GameState("Unknown",gameSettings);
         gameUserInterface = new GameUI(boardConfiguration);
 
         gameUserInterface.setMenuItemEventHandler(createHandlerForNewGameMenuItem(gameState), GameMenuItemsEnum.NewGame);
         gameUserInterface.setMenuItemEventHandler(createHandlerForGameSettingsMenuItem(),GameMenuItemsEnum.EditSettings);
         gameUserInterface.setMenuItemEventHandler(createEventForSaveState(),GameMenuItemsEnum.SaveState);
-        gameUserInterface.setMenuItemEventHandler(createEventForSaveSettings(),GameMenuItemsEnum.SaveSettings);
-        gameUserInterface.setMenuItemEventHandler(createEventForLoadSettings(),GameMenuItemsEnum.LoadSettings);
+        gameUserInterface.setMenuItemEventHandler(createEventForSaveSettings2(),GameMenuItemsEnum.SaveSettings);
+        gameUserInterface.setMenuItemEventHandler(createEventForLoadSettings2(),GameMenuItemsEnum.LoadSettings);
 
 
         gameUserInterface.setEventHandlerForNewMoveButton(createEventHandlerForNewMoveButton());
@@ -272,61 +272,134 @@ public class UrGame {
         return result;
     }
 
-    private EventHandler<ActionEvent> createEventForSaveSettings() {
+//    private EventHandler<ActionEvent> createEventForSaveSettings() {
+//        EventHandler<ActionEvent> result = (event -> {
+//
+//            FileChooser saveSettingsFile = new FileChooser();
+//            saveSettingsFile.setTitle("Save to file");
+//            saveSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
+//
+//            File f = saveSettingsFile.showSaveDialog(this.promaryStage);
+//
+//
+//            if(f!=null) {
+//
+//                try{
+//
+//                   GameObjectsWriter.saveGameSettings(gameSettings,f);
+//
+//                }catch(IOException exc) {
+//                    Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings not saved", Alert.AlertType.INFORMATION);
+//                    alert.showAndWait();
+//                }
+//            }
+//            else {
+//              Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be saved", Alert.AlertType.INFORMATION);
+//              alert.showAndWait();
+//            }
+//
+//
+//
+//        });
+//
+//        return result;
+//    }
+
+    private File cleanSettingsFile(File input) {
+        File output = null;
+
+        if(input.exists()) {
+            input.delete();
+            output = new File("gameSettings.set");
+        }
+        else {
+            output = input;
+        }
+
+        return output;
+    }
+
+    private EventHandler<ActionEvent> createEventForSaveSettings2() {
         EventHandler<ActionEvent> result = (event -> {
 
-            FileChooser saveSettingsFile = new FileChooser();
-            saveSettingsFile.setTitle("Save to file");
-            saveSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
+            File file = new File("gameSettings.set");
+            File newSettinsFile = cleanSettingsFile(file);
 
-            File f = saveSettingsFile.showSaveDialog(this.promaryStage);
-
-            if(f!=null) {
+            if(newSettinsFile!=null ) {
 
                 try{
-
-                   GameObjectsWriter.saveGameSettings(gameSettings,f);
+                    GameObjectsWriter.saveGameSettingsObject(gameSettings,newSettinsFile);
 
                 }catch(IOException exc) {
                     Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings not saved", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
+                    exc.printStackTrace();
                 }
             }
             else {
-              Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be saved", Alert.AlertType.INFORMATION);
-              alert.showAndWait();
+                Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be saved", Alert.AlertType.INFORMATION);
+                alert.showAndWait();
             }
-
-
 
         });
 
         return result;
     }
 
-    private EventHandler<ActionEvent> createEventForLoadSettings() {
+
+//    private EventHandler<ActionEvent> createEventForLoadSettings() {
+//
+//        EventHandler<ActionEvent> result = (event -> {
+//
+//            FileChooser loadSettingsFile = new FileChooser();
+//            loadSettingsFile.setTitle("Load  file");
+//            loadSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
+//
+//            File f = loadSettingsFile.showOpenDialog(this.promaryStage);
+//
+//            if(f!=null) {
+//
+//                try {
+//
+//                    GameSettings gSettingsFromFile = GameObjectsLoader.loadGameSettings(f);
+//                    if(gSettingsFromFile!=null) {
+//                        gameSettings.copy(gSettingsFromFile);
+//                    }
+//
+//                } catch(IOException e) {
+//                    Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings won't be loaded ", Alert.AlertType.INFORMATION);
+//                    alert.showAndWait();
+//
+//                }
+//
+//            }
+//            else {
+//
+//                Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be loaded", Alert.AlertType.INFORMATION);
+//                alert.showAndWait();
+//
+//            }
+//
+//        });
+//
+//        return result;
+//    }
+
+    private EventHandler<ActionEvent> createEventForLoadSettings2() {
 
         EventHandler<ActionEvent> result = (event -> {
 
-            FileChooser loadSettingsFile = new FileChooser();
-            loadSettingsFile.setTitle("Load  file");
-            loadSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
 
-            File f = loadSettingsFile.showOpenDialog(this.promaryStage);
+            File file = new File("gameSettings.set");
 
-            if(f!=null) {
+            if(file!=null) {
 
                 try {
-
-                    GameSettings gSettingsFromFile = GameObjectsLoader.loadGameSettings(f);
-                    if(gSettingsFromFile!=null) {
-                        gameSettings.copy(gSettingsFromFile);
-                    }
-
-                } catch(IOException e) {
+                        gameSettings = GameObjectsLoader.loadGameSettings2(file);
+                        gameSettings.setSettingsLoadedFromFile(true);
+                } catch(Exception e) {
                     Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings won't be loaded ", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
-
                 }
 
             }
@@ -336,11 +409,6 @@ public class UrGame {
                 alert.showAndWait();
 
             }
-
-
-
-
-
 
         });
 

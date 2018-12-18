@@ -2,9 +2,7 @@ package com.kodilla.kdabrowski.royalgameofur.iooperations;
 
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class GameObjectsWriter {
 
@@ -18,5 +16,15 @@ public class GameObjectsWriter {
             settingFW.write(gameSettings.toString());
         }
 
+    }
+
+    public  static  void saveGameSettingsObject(GameSettings gameSettings, File fileToSave ) throws IOException {
+
+        try (ObjectOutputStream ous = new ObjectOutputStream( new FileOutputStream(fileToSave))) {
+            System.out.println("pocz");
+            ous.writeObject(gameSettings);
+
+            System.out.println("koniec");
+        }
     }
 }

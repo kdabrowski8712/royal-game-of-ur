@@ -108,12 +108,14 @@ public class GameSettingsDialog {
                     int nrOfMovesToWin = Integer.parseInt(inputNrOfPieces.getText());
                     int timeOfMove = Integer.parseInt(timeInput.getText());
 
-                    value = new GameSettings(nrOfMovesToWin, humanColorPicker.getValue(), computerColorPicker.getValue(),timeOfMove);
+//                    value = new GameSettings(nrOfMovesToWin, humanColorPicker.getValue(), computerColorPicker.getValue(),timeOfMove);
+                    value = new GameSettings(nrOfMovesToWin, humanColorPicker.getValue().toString(), computerColorPicker.getValue().toString(),timeOfMove);
                 } catch (NumberFormatException ex) {
                     Alert alert = UITools.generateAlert("Parsing error", null, "Wrong data in text fields. Nr of muves will be set to 7. " +
                             " Time for play will be  set to 5 minutes ", Alert.AlertType.INFORMATION);
                     alert.showAndWait();
-                    value = new GameSettings(7, humanColorPicker.getValue(), computerColorPicker.getValue(), 5);
+//                    value = new GameSettings(7, humanColorPicker.getValue(), computerColorPicker.getValue(), 5);
+                    value = new GameSettings(7, humanColorPicker.getValue().toString(), computerColorPicker.getValue().toString(), 5);
                 }
                 return value;
             } else {
