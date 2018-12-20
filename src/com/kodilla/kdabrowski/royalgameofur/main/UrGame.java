@@ -2,14 +2,18 @@ package com.kodilla.kdabrowski.royalgameofur.main;
 
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameMenuItemsEnum;
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameUI;
+import com.kodilla.kdabrowski.royalgameofur.gameui.MovesHostoryToSave;
 import com.kodilla.kdabrowski.royalgameofur.gameui.UITools;
 import com.kodilla.kdabrowski.royalgameofur.iooperations.GameObjectsLoader;
 import com.kodilla.kdabrowski.royalgameofur.iooperations.GameObjectsWriter;
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SampleClass;
 import com.kodilla.kdabrowski.royalgameofur.settings.BoardConfiguration;
 import com.kodilla.kdabrowski.royalgameofur.state.GameMove;
 import com.kodilla.kdabrowski.royalgameofur.state.GameState;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 
+import com.kodilla.kdabrowski.royalgameofur.state.LoadedState;
+import com.kodilla.kdabrowski.royalgameofur.state.SimplifiedGameStateToSave;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -48,11 +53,16 @@ public class UrGame {
         gameUserInterface.setMenuItemEventHandler(createEventForSaveState(),GameMenuItemsEnum.SaveState);
         gameUserInterface.setMenuItemEventHandler(createEventForSaveSettings2(),GameMenuItemsEnum.SaveSettings);
         gameUserInterface.setMenuItemEventHandler(createEventForLoadSettings2(),GameMenuItemsEnum.LoadSettings);
+        gameUserInterface.setMenuItemEventHandler(createEventForEndGame(),GameMenuItemsEnum.EndGame);
+        gameUserInterface.setMenuItemEventHandler(createEventForLoadState(),GameMenuItemsEnum.LoadState);
 
 
         gameUserInterface.setEventHandlerForNewMoveButton(createEventHandlerForNewMoveButton());
         gameUserInterface.setEventHandlerOnPlayerPieces(createEventForPieces(),gameState);
         this.promaryStage = primaryStage;
+
+        gameUserInterface.disableMenuItem(GameMenuItemsEnum.EndGame);
+
     }
 
     public Scene getSceneToRender() {
@@ -64,39 +74,64 @@ public class UrGame {
 
         EventHandler<ActionEvent> newGameMenuItemEvent = (event) -> {
 
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Choose your nickname");
-            dialog.setHeaderText("Here you can define your nick");
-            dialog.setContentText("Please enter your nick:");
+            boolean nicknameSet=false;
 
-            Optional<String> result = dialog.showAndWait();
+                if(gameState.getNrOfGames()==0) {
+                    nicknameSet = askForUserName(state);
+                    System.out.println("tutaj " + nicknameSet);
+                }
 
-            if(!result.isPresent()) {
-                gameUserInterface.disableewMoveButton();
-                gameUserInterface.updatePlayerNick("Unknown");
-                gameUserInterface.enableEditSettingsMenuItem();
-                Alert alert = UITools.generateAlert("No username choose",null,"Choose username to start game", Alert.AlertType.INFORMATION);
-                alert.showAndWait();
-            }
-            else {
+                 if(gameState.getNrOfGames()>0 || nicknameSet ) {
+                    System.out.println("tu " + nicknameSet);
 
-                gameUserInterface.resetForNewGame();
-                gameState.getHuman().resetPlayer();
-                gameState.getComputer().resetPlayer();
+                    gameUserInterface.resetForNewGame();
+                    gameUserInterface.increseGameCounter();
+                    gameState.increaseGamesNumber();
+                    gameState.getHuman().resetPlayer();
+                    gameState.getComputer().resetPlayer();
+
+                    gameUserInterface.updateNumberOfMovesToWin(gameSettings.getNrOfPiecesToWin());
+
+                    setTimeThread();
+                }
 
 
-                result.ifPresent(name -> {
-                    state.getHuman().setNick(result.get());
-                    gameUserInterface.updatePlayerNick(result.get());
-                });
-                System.out.println("w else");
 
-                gameUserInterface.updateNumberOfMovesToWin(gameSettings.getNrOfPiecesToWin());
-                gameUserInterface.disableEditSettingsMenuItem();
-                gameUserInterface.disableLoadSettingsMenuItem();
+//                TextInputDialog dialog = new TextInputDialog();
+//                dialog.setTitle("Choose your nickname");
+//                dialog.setHeaderText("Here you can define your nick");
+//                dialog.setContentText("Please enter your nick:");
+//
+//                Optional<String> result = dialog.showAndWait();
+//
+//                if (!result.isPresent()) {
+//                    gameUserInterface.disableewMoveButton();
+//                    gameUserInterface.updatePlayerNick("Unknown");
+//                    gameUserInterface.enableEditSettingsMenuItem();
+//                    Alert alert = UITools.generateAlert("No username choose", null, "Choose username to start game", Alert.AlertType.INFORMATION);
+//                    alert.showAndWait();
+//                } else {
+//                    gameUserInterface.enableEndGameMenuItem();
+//                    gameUserInterface.resetForNewGame();
+//                    gameUserInterface.increseGameCounter();
+//                    gameState.increaseGamesNumber();
+//                    gameState.getHuman().resetPlayer();
+//                    gameState.getComputer().resetPlayer();
+//
+//
+//                    result.ifPresent(name -> {
+//                        state.getHuman().setNick(result.get());
+//                        gameUserInterface.updatePlayerNick(result.get());
+//                    });
+//                    System.out.println("w else");
+//
+//                    gameUserInterface.updateNumberOfMovesToWin(gameSettings.getNrOfPiecesToWin());
+//                    gameUserInterface.disableEditSettingsMenuItem();
+//                    gameUserInterface.disableLoadSettingsMenuItem();
+//
+//                    setTimeThread();
+//                }
 
-                setTimeThread();
-            }
 
 
         };
@@ -146,13 +181,37 @@ public class UrGame {
 
             if(result.isPresent()) {
                 GameSettings gameSettingsToCopy = result.get();
-
                 gameSettings.copy(gameSettingsToCopy);
                 gameState.updateGameState(gameSettings);
             }
         };
 
         return gameSettingsMenuItemEvent;
+    }
+
+    private boolean askForUserName(GameState state) {
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Choose your nickname");
+        dialog.setHeaderText("Here you can define your nick");
+        dialog.setContentText("Please enter your nick:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (!result.isPresent()) {
+            gameUserInterface.disableewMoveButton();
+            gameUserInterface.updatePlayerNick("Unknown");
+            //gameUserInterface.enableEditSettingsMenuItem();
+            gameUserInterface.enableMenuItem(GameMenuItemsEnum.EditSettings);
+            Alert alert = UITools.generateAlert("No username choose", null, "Choose username to start game", Alert.AlertType.INFORMATION);
+            alert.showAndWait();
+            return false;
+        }
+        else {
+            state.getHuman().setNick(result.get());
+            gameUserInterface.updatePlayerNick(result.get());
+            return true;
+        }
     }
 
     private EventHandler<ActionEvent> createEventHandlerForNewMoveButton() {
@@ -181,6 +240,7 @@ public class UrGame {
 
                 alert.showAndWait();
                 gameUserInterface.disableewMoveButton();
+
                 gameState.setPlayerMove(true);
 
                 GameMove humanMove = new GameMove(true, false, boardConfiguration, gameState,
@@ -238,33 +298,17 @@ public class UrGame {
     private EventHandler<ActionEvent> createEventForSaveState() {
         EventHandler<ActionEvent> result = (event -> {
 
-            FileChooser test = new FileChooser();
-            test.setTitle("Save to file");
+            FileChooser saveStateFile = new FileChooser();
+            saveStateFile.setTitle("Save to file");
+            saveStateFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("State file (.st)","*.st"));
 
-            File f = test.showSaveDialog(this.promaryStage);
-
-
-            //System.out.println(f.toPath());
+            File file = saveStateFile.showSaveDialog(this.promaryStage);
 
             try {
+                GameObjectsWriter.saveGameState(gameState,gameUserInterface,file);
 
-//                FileOutputStream fs = new FileOutputStream(f);
-//                ObjectOutputStream stream = new ObjectOutputStream(fs);
-//
-//                stream.writeObject(boardConfiguration.getFieldsWithRosette().get(0));
-//                stream.close();
-//
-//                FileInputStream ifs = new FileInputStream(f);
-//                ObjectInputStream istream = new ObjectInputStream(ifs);
-//
-//                Rosette r = (Rosette) istream.readObject();
-//                System.out.println(r.getRosettePosition().getColumn());
-//                System.out.println(r.getRosettePosition().getRow());
-//                istream.close();
-
-
-            }catch (Exception e) {
-                System.out.println(e);
+            }catch(IOException e) {
+                e.printStackTrace();
             }
 
         });
@@ -272,63 +316,46 @@ public class UrGame {
         return result;
     }
 
-//    private EventHandler<ActionEvent> createEventForSaveSettings() {
-//        EventHandler<ActionEvent> result = (event -> {
-//
-//            FileChooser saveSettingsFile = new FileChooser();
-//            saveSettingsFile.setTitle("Save to file");
-//            saveSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
-//
-//            File f = saveSettingsFile.showSaveDialog(this.promaryStage);
-//
-//
-//            if(f!=null) {
-//
-//                try{
-//
-//                   GameObjectsWriter.saveGameSettings(gameSettings,f);
-//
-//                }catch(IOException exc) {
-//                    Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings not saved", Alert.AlertType.INFORMATION);
-//                    alert.showAndWait();
-//                }
-//            }
-//            else {
-//              Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be saved", Alert.AlertType.INFORMATION);
-//              alert.showAndWait();
-//            }
-//
-//
-//
-//        });
-//
-//        return result;
-//    }
+    private EventHandler<ActionEvent> createEventForLoadState() {
+        EventHandler<ActionEvent> result = (event -> {
 
-    private File cleanSettingsFile(File input) {
-        File output = null;
+            FileChooser loadStateFile = new FileChooser();
+            loadStateFile.setTitle("Load file");
+            loadStateFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("State file (.st)","*.st"));
 
-        if(input.exists()) {
-            input.delete();
-            output = new File("gameSettings.set");
-        }
-        else {
-            output = input;
-        }
+            File file = loadStateFile.showOpenDialog(this.promaryStage);
 
-        return output;
+            System.out.println("load state handler");
+            try {
+
+                LoadedState lState = GameObjectsLoader.loadState(file);
+
+                System.out.println(lState.getHistory().getHistryEntries().get(0));
+
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return result;
     }
 
     private EventHandler<ActionEvent> createEventForSaveSettings2() {
         EventHandler<ActionEvent> result = (event -> {
 
-            File file = new File("gameSettings.set");
-            File newSettinsFile = cleanSettingsFile(file);
+            System.out.println("save settings handler");
+            FileChooser saveSettingsFile = new FileChooser();
+            saveSettingsFile.setTitle("Save to file");
+            saveSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Settings file (.set)","*.set"));
 
-            if(newSettinsFile!=null ) {
+            File file = saveSettingsFile.showSaveDialog(this.promaryStage);
+
+            if(file!=null ) {
 
                 try{
-                    GameObjectsWriter.saveGameSettingsObject(gameSettings,newSettinsFile);
+                    GameObjectsWriter.saveGameSettingsObject(gameSettings,file);
 
                 }catch(IOException exc) {
                     Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings not saved", Alert.AlertType.INFORMATION);
@@ -346,51 +373,15 @@ public class UrGame {
         return result;
     }
 
-
-//    private EventHandler<ActionEvent> createEventForLoadSettings() {
-//
-//        EventHandler<ActionEvent> result = (event -> {
-//
-//            FileChooser loadSettingsFile = new FileChooser();
-//            loadSettingsFile.setTitle("Load  file");
-//            loadSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File (.txt)","*.txt"));
-//
-//            File f = loadSettingsFile.showOpenDialog(this.promaryStage);
-//
-//            if(f!=null) {
-//
-//                try {
-//
-//                    GameSettings gSettingsFromFile = GameObjectsLoader.loadGameSettings(f);
-//                    if(gSettingsFromFile!=null) {
-//                        gameSettings.copy(gSettingsFromFile);
-//                    }
-//
-//                } catch(IOException e) {
-//                    Alert alert = UITools.generateAlert("File Operation Error",null,"Error in file operation. Settings won't be loaded ", Alert.AlertType.INFORMATION);
-//                    alert.showAndWait();
-//
-//                }
-//
-//            }
-//            else {
-//
-//                Alert alert = UITools.generateAlert("No file choosen",null,"No file was choosen. Settings won't be loaded", Alert.AlertType.INFORMATION);
-//                alert.showAndWait();
-//
-//            }
-//
-//        });
-//
-//        return result;
-//    }
-
     private EventHandler<ActionEvent> createEventForLoadSettings2() {
 
         EventHandler<ActionEvent> result = (event -> {
 
+            FileChooser loadSettingsFile = new FileChooser();
+            loadSettingsFile.setTitle("Load  file");
+            loadSettingsFile.getExtensionFilters().add(new FileChooser.ExtensionFilter("Settings file (.set)","*.set"));
 
-            File file = new File("gameSettings.set");
+           File file = loadSettingsFile.showOpenDialog(this.promaryStage);
 
             if(file!=null) {
 
@@ -415,6 +406,25 @@ public class UrGame {
         return result;
     }
 
+    private EventHandler<ActionEvent> createEventForEndGame() {
+        EventHandler<ActionEvent> result = (event -> {
+
+            gameUserInterface.resetForNewGame();
+            gameState.getHuman().resetPlayer();
+            gameState.getComputer().resetPlayer();
+
+            //gameUserInterface.enableEditSettingsMenuItem();
+            gameUserInterface.enableMenuItem(GameMenuItemsEnum.EditSettings);
+
+            //gameUserInterface.enableLoadSettingsMenuItem();
+            gameUserInterface.enableMenuItem(GameMenuItemsEnum.LoadSettings);
+            gameUserInterface.enableMenuItem(GameMenuItemsEnum.SaveSettings);
+            gameUserInterface.enableMenuItem(GameMenuItemsEnum.LoadState);
+
+        });
+
+        return result;
+    }
 
     private void performComputerMove(BoardConfiguration boardConfiguration , GameState gameState) {
 
@@ -452,4 +462,5 @@ public class UrGame {
 
         return decision;
     }
+
 }

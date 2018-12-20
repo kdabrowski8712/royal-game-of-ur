@@ -3,16 +3,21 @@ package com.kodilla.kdabrowski.royalgameofur.state;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.io.Serializable;
+
 public class Piece {
 
     private boolean isOnBoard;
     private boolean isMovedThroughBoard;
     private Circle pieceRepresentation;
-    private Color pieceColor;
+    //private Color pieceColor;
+    private  String pieceColor;
     private BoardCoordinates piecePositionOnBoard;
 
-    public Piece(Color color) {
-        pieceRepresentation =  new Circle(20 , color);
+    //public static final long serialVersionUID = -2276823960220649728L;
+
+    public Piece(String color) {
+        pieceRepresentation =  new Circle(20 , Color.web(color));
         this.pieceColor = color;
 
         piecePositionOnBoard = new BoardCoordinates(0,0);
@@ -58,9 +63,9 @@ public class Piece {
         isMovedThroughBoard = movedThroughBoard;
     }
 
-    public void setPieceColor(Color pieceColor) {
+    public void setPieceColor(String pieceColor) {
         this.pieceColor = pieceColor;
-        pieceRepresentation.setFill(pieceColor);
+        pieceRepresentation.setFill(Color.web(pieceColor));
     }
 
     public void removeFromBoard(Player player) {
@@ -74,4 +79,15 @@ public class Piece {
         this.piecePositionOnBoard.setColumn(newCoordiantes.getColumn());
     }
 
+    public SimplifiedPieceToSave returnPieceToSave() {
+        SimplifiedPieceToSave result = new SimplifiedPieceToSave();
+
+        result.setMovedThroughBoard(isMovedThroughBoard);
+        result.setOnBoard(isOnBoard);
+        result.setPieceColor(pieceColor);
+        result.setPieceColumn(piecePositionOnBoard.getColumn());
+        result.setPieceRow(piecePositionOnBoard.getRow());
+
+        return result;
+    }
 }

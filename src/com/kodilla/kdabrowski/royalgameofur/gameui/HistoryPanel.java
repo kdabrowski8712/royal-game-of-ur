@@ -13,7 +13,6 @@ public class HistoryPanel {
     private Label titleLabel;
     private HBox titleBox;
     private ListView<String> histView;
-    private ObservableList<String> histValues;
 
     private String cssLayout4 = "-fx-border-color: black;\n" +
             "-fx-border-insets: 5;\n" +
@@ -45,6 +44,8 @@ public class HistoryPanel {
         result.getChildren().add(titleBox);
         result.getChildren().add(histView);
 
+
+
         return result;
     }
 
@@ -54,6 +55,17 @@ public class HistoryPanel {
 
     public void clear() {
         this.histView.getItems().remove(0,histView.getItems().size());
+    }
+
+    public MovesHostoryToSave getEntriesToSave() {
+        MovesHostoryToSave result = new MovesHostoryToSave();
+
+        for(String s : histView.getItems()) {
+            result.getHistryEntries().add(s);
+        }
+
+
+        return result;
     }
 
 }

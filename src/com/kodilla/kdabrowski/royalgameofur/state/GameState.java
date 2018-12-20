@@ -8,20 +8,18 @@ public class GameState {
     private Player computer;
     private boolean playerMove;
     private GameMove humanMoveToPassToOnClickHandler;
+    private int nrOfGames;
 
     public GameState(String playerNick , GameSettings settings ){
         playerMove = false;
-//        human = new Player(playerNick,settings.getHumanColor());
-//        computer = new Player("Computer",settings.getComputerColor());
-        human = new Player(playerNick, Color.web(settings.getHumanColorText()));
-        computer = new Player("Computer",Color.web(settings.getComputerColorText()));
+        human = new Player(playerNick, settings.getHumanColorText());
+        computer = new Player("Computer",settings.getComputerColorText());
     }
 
     public void updateGameState(GameSettings settings) {
-//        human.setPiecesColor(settings.getHumanColor());
-//        computer.setPiecesColor(settings.getComputerColor());
-        human.setPiecesColor(Color.web(settings.getComputerColorText()));
-        computer.setPiecesColor(Color.web(settings.getComputerColorText()));
+
+        human.setPiecesColor(settings.getHumanColorText());
+        computer.setPiecesColor(settings.getComputerColorText());
     }
 
     public Player getHuman() {
@@ -46,5 +44,26 @@ public class GameState {
 
     public void setHumanMoveToPassToOnClickHandler(GameMove humanMoveToPassToOnClickHandler) {
         this.humanMoveToPassToOnClickHandler = humanMoveToPassToOnClickHandler;
+    }
+
+    public void increaseGamesNumber() {
+        nrOfGames+=1;
+    }
+
+    public int getNrOfGames() {
+        return nrOfGames;
+    }
+
+    public SimplifiedGameStateToSave returnStateToSave() {
+
+    SimplifiedGameStateToSave result = new SimplifiedGameStateToSave();
+
+    result.setComputer(computer.returnPlayerToSave());
+    result.setHuman(human.returnPlayerToSave());
+    result.setNrOfGames(nrOfGames);
+    result.setPlayerMove(playerMove);
+
+    return result;
+
     }
 }

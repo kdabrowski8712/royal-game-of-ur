@@ -22,7 +22,7 @@ public class Player {
         return result;
     }
 
-    public Player(String nick , Color pieceColor) {
+    public Player(String nick , String pieceColor) {
         this.nick = nick;
 
         playerPieces = new ArrayList<>();
@@ -35,7 +35,6 @@ public class Player {
         nrOfPiecesMoved = 0;
 
         populatePiecesStartingPositions();
-
     }
 
     private void populatePiecesStartingPositions() {
@@ -149,39 +148,66 @@ public class Player {
         return  win;
     }
 
-    public void setPiecesColor(Color newColor) {
+    public void setPiecesColor(String newColor) {
         for(Piece p : playerPieces) {
             p.setPieceColor(newColor);
         }
     }
 
     public  boolean checkCollisionWithPlayerPieces(BoardCoordinates coordinatesToCheck) {
-        boolean found = false;
-
+      //  boolean found = false;
         Iterator<Piece> pieceIterator = playerPieces.iterator();
-
-        while (!found && pieceIterator.hasNext()) {
-
+//        while (!found && pieceIterator.hasNext()) {
+////
+////            Piece p = pieceIterator.next();
+////
+////            if (p.isOnBoard()) {
+////                if (p.getPiecePositionOnBoard().getColumn() == coordinatesToCheck.getColumn() && p.getPiecePositionOnBoard().getRow() == coordinatesToCheck.getRow()) {
+////                    found = true; // teg dlugiego ifa zamienic w funkcje funkcja Extract w intellij i do metody prywatnej małej
+////
+////                }
+////            }
+////
+////        }
+        while (pieceIterator.hasNext()) {
             Piece p = pieceIterator.next();
+            if (p.isOnBoard() && p.getPiecePositionOnBoard().equals(coordinatesToCheck)) {
+                //if (p.getPiecePositionOnBoard().getColumn() == coordinatesToCheck.getColumn() && p.getPiecePositionOnBoard().getRow() == coordinatesToCheck.getRow()) {
+                    return true; // teg dlugiego ifa zamienic w funkcje funkcja Extract w intellij i do metody prywatnej małej
 
-            if (p.isOnBoard()) {
-                if (p.getPiecePositionOnBoard().getColumn() == coordinatesToCheck.getColumn() && p.getPiecePositionOnBoard().getRow() == coordinatesToCheck.getRow()) {
-                    found = true;
-                }
+               // }
             }
-
         }
-        return found;
+        return false;
+        //return found;
     }
 
     public boolean checkIfPlayerHaveAllPiecesOutOfBoard(){
-        boolean result = false;
 
         if(getPiecesReadyToEnterIntoBoard()==7) {
-            result=true;
+            return  true; // wrzucic returny
         }
 
+        return false;
+    }
+
+    public SimpliFiedPlayerToSave returnPlayerToSave() {
+
+        SimpliFiedPlayerToSave result = new SimpliFiedPlayerToSave();
+
+        result.setNick(nick);
+        result.setNrOfPiecesLeft(nrOfPiecesLeft);
+        result.setNrOfPiecesMoved(nrOfPiecesMoved);
+        result.setTotalNumberOfPlayerPieces(totalNumberOfPlayerPieces);
+
+        for(Piece p : playerPieces) {
+            result.getPlayerPieces().add(p.returnPieceToSave());
+        }
+
+
+
         return result;
+
     }
 
 }

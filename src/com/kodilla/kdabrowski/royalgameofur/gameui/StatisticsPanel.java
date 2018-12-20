@@ -37,8 +37,7 @@ public class StatisticsPanel {
             "-fx-border-insets: 5;\n" +
             "-fx-border-width: 1;\n" +
             "-fx-border-style: solid;\n";
-
-
+    
     public StatisticsPanel() {
         nrOfGamesValue = new Label("0");
         humaanPiecesCleared = new Label("0");
@@ -134,6 +133,8 @@ public class StatisticsPanel {
         humanPiecesLeft.setText("7");
         computerPiecesLeft.setText("7");
         computerPiecesCleared.setText("0");
+        diceRollHuman.setText("0");
+        diceRollComputer.setText("0");
     }
 
     public void updateHumanDiceRoll(int val) {

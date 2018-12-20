@@ -55,7 +55,7 @@ public class GameUI {
     public void changeStateAfterWin(String playerNick) {
         historyPanel.addEntry( playerNick + " win this game !!");
         gameBoardPanel.getNewMoveButton().setDisable(true);
-        gameMenu.getGameSettings().setDisable(false);
+        gameMenu.getEditGameSettings().setDisable(false);
 
     }
 
@@ -63,18 +63,23 @@ public class GameUI {
         gameBoardPanel.clear();
         historyPanel.clear();
         statisticsPanel.clear();
-        statisticsPanel.increaseGameCounter();
-        gameMenu.getGameSettings().setDisable(true);
         gameBoardPanel.getNewMoveButton().setDisable(false);
+
+        enableMenuItem(GameMenuItemsEnum.EndGame);
+        enableMenuItem(GameMenuItemsEnum.SaveSettings);
+
+        disableMenuItem(GameMenuItemsEnum.LoadSettings);
+        disableMenuItem(GameMenuItemsEnum.EditSettings);
+        disableMenuItem(GameMenuItemsEnum.LoadState);
+
     }
 
     public void resetForNewGameWhenTimeOut() {
         gameBoardPanel.clear();
         historyPanel.clear();
         statisticsPanel.clear();
-        gameMenu.getGameSettings().setDisable(false);
+        gameMenu.getEditGameSettings().setDisable(false);
         gameBoardPanel.getNewMoveButton().setDisable(true);
-        statisticsPanel.updatePlayerNick("Unknown");
     }
 
     public void enableNewMoveButton() {
@@ -337,22 +342,10 @@ public class GameUI {
 
     }
 
-//    public void setEventHandlerForNewGameMenuItem(EventHandler<ActionEvent> eventToSet) {
-//
-//        gameMenu.getNewGameMenuItem().setOnAction(eventToSet);
-//    }
-//
-//    public  void setEventHandlerForGameSettingsMenuItem(EventHandler<ActionEvent> eventToSet) {
-//        gameMenu.getGameSettings().setOnAction(eventToSet);
-//    }
-
     public  void setEventHandlerForNewMoveButton(EventHandler<ActionEvent> eventToSet) {
         gameBoardPanel.getNewMoveButton().setOnAction(eventToSet);
     }
 
-//    public void  setEventHandlerForSaveStateMenu(EventHandler<ActionEvent> eventToSet) {
-//
-//    }
 
     public void setMenuItemEventHandler(EventHandler<ActionEvent> eventToSet , GameMenuItemsEnum chosenItem) {
         gameMenu.setEventHandlerForMenuItem(eventToSet,chosenItem);
@@ -365,21 +358,23 @@ public class GameUI {
         }
     }
 
-    public void disableEditSettingsMenuItem() {
-        gameMenu.getGameSettings().setDisable(true);
+    public void  enableMenuItem(GameMenuItemsEnum menuToEnable) {
+        gameMenu.enableMenu(menuToEnable);
     }
 
-    public void enableEditSettingsMenuItem() {
-        gameMenu.getGameSettings().setDisable(false);
+    public void  disableMenuItem(GameMenuItemsEnum menuToEnable) {
+        gameMenu.disableMenu(menuToEnable);
     }
 
-    public void disableLoadSettingsMenuItem() {
-        gameMenu.getLoadGameSettings().setDisable(true);
+    public void increseGameCounter() {
+        statisticsPanel.increaseGameCounter();
     }
 
-    public void enableLoadSettingsMenuItem() {
-        gameMenu.getLoadGameSettings().setDisable(false);
-    }
+    public MovesHostoryToSave returnHistoryToSave() {
+        MovesHostoryToSave result = null;
+        result = historyPanel.getEntriesToSave();
 
+        return result;
+    }
 
 }

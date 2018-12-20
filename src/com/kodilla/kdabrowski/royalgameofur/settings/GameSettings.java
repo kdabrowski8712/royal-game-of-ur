@@ -20,31 +20,12 @@ public class GameSettings implements Serializable{
 
     public static final long serialVersionUID = 7965599591866909073L;
 
-
-//    public GameSettings(int nrOfPiecesToWin, Color humanColor, Color computerColor, int time) {
-//        this.nrOfPiecesToWin = nrOfPiecesToWin;
-//        this.humanColor = humanColor;
-//        this.computerColor = computerColor;
-//        this.timeOfPlaying = time;
-//        settingsLoadedFromFile = false;
-//
-//    }
-
-
     public GameSettings(int nrOfPiecesToWin, String humanColorText, String computerColorText, int timeOfPlaying) {
         this.nrOfPiecesToWin = nrOfPiecesToWin;
         this.humanColorText = humanColorText;
         this.computerColorText = computerColorText;
         this.timeOfPlaying = timeOfPlaying;
     }
-
-//    public void copy(GameSettings anotherGameSettingsObject) {
-//        humanColor = anotherGameSettingsObject.getHumanColor();
-//        computerColor = anotherGameSettingsObject.computerColor;
-//        nrOfPiecesToWin = anotherGameSettingsObject.getNrOfPiecesToWin();
-//        timeOfPlaying = anotherGameSettingsObject.getTimeOfPlaying();
-//        this.settingsLoadedFromFile = anotherGameSettingsObject.isSettingsLoadedFromFile();
-//    }
 
     public void copy(GameSettings anotherGameSettingsObject) {
         humanColorText = anotherGameSettingsObject.getHumanColorText();
