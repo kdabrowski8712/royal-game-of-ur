@@ -1,9 +1,10 @@
 package com.kodilla.kdabrowski.royalgameofur.state;
 
-import com.kodilla.kdabrowski.royalgameofur.gameui.MovesHostoryToSave;
+import com.kodilla.kdabrowski.royalgameofur.iooperations.MovesHostoryToSave;
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SimplifiedGameStateToSave;
 
 public class LoadedState {
-    private  SimplifiedGameStateToSave loadedState;
+    private SimplifiedGameStateToSave loadedState;
     private MovesHostoryToSave history ;
 
     public SimplifiedGameStateToSave getLoadedState() {

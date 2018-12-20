@@ -2,18 +2,15 @@ package com.kodilla.kdabrowski.royalgameofur.main;
 
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameMenuItemsEnum;
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameUI;
-import com.kodilla.kdabrowski.royalgameofur.gameui.MovesHostoryToSave;
 import com.kodilla.kdabrowski.royalgameofur.gameui.UITools;
 import com.kodilla.kdabrowski.royalgameofur.iooperations.GameObjectsLoader;
 import com.kodilla.kdabrowski.royalgameofur.iooperations.GameObjectsWriter;
-import com.kodilla.kdabrowski.royalgameofur.iooperations.SampleClass;
 import com.kodilla.kdabrowski.royalgameofur.settings.BoardConfiguration;
 import com.kodilla.kdabrowski.royalgameofur.state.GameMove;
 import com.kodilla.kdabrowski.royalgameofur.state.GameState;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 
 import com.kodilla.kdabrowski.royalgameofur.state.LoadedState;
-import com.kodilla.kdabrowski.royalgameofur.state.SimplifiedGameStateToSave;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,7 +27,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.List;
 import java.util.Optional;
 
 

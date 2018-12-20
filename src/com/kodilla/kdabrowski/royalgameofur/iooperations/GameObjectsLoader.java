@@ -1,15 +1,11 @@
 package com.kodilla.kdabrowski.royalgameofur.iooperations;
 
-import com.kodilla.kdabrowski.royalgameofur.gameui.MovesHostoryToSave;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 import com.kodilla.kdabrowski.royalgameofur.state.LoadedState;
-import com.kodilla.kdabrowski.royalgameofur.state.SimplifiedGameStateToSave;
-import javafx.scene.paint.Color;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GameObjectsLoader {
 
@@ -107,25 +103,4 @@ public class GameObjectsLoader {
         return result;
     }
 
-
-    public static List<SampleClass> testLoad(File f) throws IOException {
-
-
-        List<SampleClass> result = null;
-
-        try(ObjectInputStream ois = new ObjectInputStream( new FileInputStream(f))) {
-            try {
-                Object o = ois.readObject();
-
-                if (o instanceof ArrayList) {
-                    result = (ArrayList<SampleClass>) o;
-                }
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
-    }
 }

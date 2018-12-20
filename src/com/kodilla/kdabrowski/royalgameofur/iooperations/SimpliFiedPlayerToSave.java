@@ -1,4 +1,6 @@
-package com.kodilla.kdabrowski.royalgameofur.state;
+package com.kodilla.kdabrowski.royalgameofur.iooperations;
+
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SimplifiedPieceToSave;
 
 import java.io.Serializable;
 import java.util.ArrayList;

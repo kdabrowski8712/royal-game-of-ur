@@ -1,11 +1,8 @@
 package com.kodilla.kdabrowski.royalgameofur.iooperations;
 
 import com.kodilla.kdabrowski.royalgameofur.gameui.GameUI;
-import com.kodilla.kdabrowski.royalgameofur.gameui.MovesHostoryToSave;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
 import com.kodilla.kdabrowski.royalgameofur.state.GameState;
-import com.kodilla.kdabrowski.royalgameofur.state.Player;
-import com.kodilla.kdabrowski.royalgameofur.state.SimplifiedGameStateToSave;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -34,24 +31,6 @@ public class GameObjectsWriter {
 
             System.out.println("koniec");
         }
-    }
-
-
-    public static  void saveGameTest(File fileToSave) throws IOException {
-
-        List<SampleClass> testList = new ArrayList<>();
-
-        testList.add(new SampleClass(123,"aaa"));
-        testList.add(new SampleClass(456,"bbb"));
-        testList.add(new SampleClass(567,"ccc"));
-
-        try (ObjectOutputStream ous = new ObjectOutputStream( new FileOutputStream(fileToSave))){
-
-            ous.writeObject(testList);
-
-        }
-
-
     }
 
 }

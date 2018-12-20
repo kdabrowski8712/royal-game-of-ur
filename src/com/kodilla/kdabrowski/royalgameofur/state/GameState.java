@@ -1,7 +1,7 @@
 package com.kodilla.kdabrowski.royalgameofur.state;
 
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SimplifiedGameStateToSave;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
-import javafx.scene.paint.Color;
 
 public class GameState {
     private Player human;

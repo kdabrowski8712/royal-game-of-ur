@@ -1,7 +1,7 @@
 package com.kodilla.kdabrowski.royalgameofur.state;
 
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SimpliFiedPlayerToSave;
 import com.kodilla.kdabrowski.royalgameofur.settings.GameSettings;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Iterator;

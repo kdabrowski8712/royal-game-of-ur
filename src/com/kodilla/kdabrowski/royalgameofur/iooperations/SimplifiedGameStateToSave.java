@@ -1,4 +1,4 @@
-package com.kodilla.kdabrowski.royalgameofur.state;
+package com.kodilla.kdabrowski.royalgameofur.iooperations;
 
 import java.io.Serializable;
 

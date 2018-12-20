@@ -1,6 +1,6 @@
 package com.kodilla.kdabrowski.royalgameofur.gameui;
 
-import javafx.collections.ObservableList;
+import com.kodilla.kdabrowski.royalgameofur.iooperations.MovesHostoryToSave;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

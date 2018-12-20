@@ -1,4 +1,4 @@
-package com.kodilla.kdabrowski.royalgameofur.gameui;
+package com.kodilla.kdabrowski.royalgameofur.iooperations;
 
 import java.io.Serializable;
 import java.util.ArrayList;

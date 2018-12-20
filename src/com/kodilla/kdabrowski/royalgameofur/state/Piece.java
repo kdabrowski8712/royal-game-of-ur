@@ -1,9 +1,8 @@
 package com.kodilla.kdabrowski.royalgameofur.state;
 
+import com.kodilla.kdabrowski.royalgameofur.iooperations.SimplifiedPieceToSave;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import java.io.Serializable;
 
 public class Piece {
 
